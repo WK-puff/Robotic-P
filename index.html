@@ -108,6 +108,48 @@
     @media(max-width:560px){.app{padding:13px 11px 30px}.topbar{margin-bottom:30px;height:auto}.top-right{display:none}.brand-symbol{width:40px;height:40px}.page-title{margin-bottom:20px}.page-title h1{font-size:32px}.panel-head{padding:14px 15px}.panel-content{padding:17px 13px}.count-screen{padding:12px 0}.stepper{width:100%;justify-content:space-between;gap:8px}.stepper-label{font-size:10px}.wizard-actions{align-items:stretch;flex-wrap:wrap}.wizard-actions>button{flex:1}.wizard-actions .right-actions{flex:2}.wizard-actions .right-actions button{flex:1;padding:0 9px}.field-grid{grid-template-columns:1fr}.angle-entry{grid-template-columns:1fr}.scene-toolbar{align-items:flex-start}.scene-toolbar h2{font-size:15px}.canvas-wrap{height:52vh;min-height:320px}.stage-panel{padding:13px 12px}.stage-equation{gap:3px;font-size:10px}.stage-equation span{padding:5px 4px}.dh-sequence-card{padding:10px}.dh-row{grid-template-columns:27px repeat(4,minmax(0,1fr));gap:3px;padding:5px}.dh-state{grid-column:2/6;text-align:right;padding-right:4px}.dh-cell{font-size:9px}.side-panel{grid-template-columns:1fr}.point-card{grid-column:auto}.readout-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.viewport-controls{gap:7px}.speed-control{min-width:100%;margin:4px 0 0}.review-foot{align-items:stretch}.review-foot button{flex:1}}
     @media(prefers-reduced-motion:reduce){.wizard-card,.scene-section{animation:none!important}}
 
+
+    /* Ajustes de consistencia: selector angular único y tarjetas de articulación. */
+    .choice{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;min-width:142px;min-height:56px;text-align:left;padding:8px 14px}
+    .choice em{font:500 9px var(--mono);letter-spacing:.015em;color:#aeb2b9}
+    .choice[aria-pressed="true"] em{color:#ff9a9d}
+    .angle-entry{display:block;max-width:540px}
+    .angle-combo{display:flex;align-items:stretch;width:100%;min-width:0;border:1px solid #3a3d43;border-radius:8px;background:#0d0e10;overflow:hidden;transition:border-color .16s,box-shadow .16s}
+    .angle-combo:focus-within{border-color:var(--red);box-shadow:0 0 0 3px #e044441b}
+    .angle-combo input{flex:1;min-width:0;height:48px;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;padding:0 14px!important;font:500 14px var(--mono)!important;color:#f1f1f2}
+    .angle-combo select{flex:0 0 150px;width:150px;height:48px;border:0;border-left:1px solid #3a3d43!important;border-radius:0!important;background:#191b1e!important;padding:0 10px!important;color:#ffb1b4!important;font:500 11px var(--mono)!important;box-shadow:none!important}
+    .implicit-q-option{display:flex;align-items:flex-start;gap:11px;padding:13px 14px;margin:0 0 18px;border:1px solid #493034;border-radius:8px;background:linear-gradient(110deg,#211416,#141517);cursor:pointer}
+    .implicit-q-option input{width:17px;height:17px;margin:2px 0 0;accent-color:var(--red);flex:none}
+    .implicit-q-option span{display:flex;flex-direction:column;gap:4px}
+    .implicit-q-option strong{font:600 11px var(--mono);color:#f0e7e8}
+    .implicit-q-option small{font-size:10px;color:#a9a1a4;line-height:1.45}
+    .dh-math-card{margin-top:13px;padding:0;background:#111315}
+    .dh-math-card details>summary,.matrix-row-detail>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;list-style:none;cursor:pointer;padding:15px 16px}
+    .dh-math-card details>summary::-webkit-details-marker,.matrix-row-detail>summary::-webkit-details-marker{display:none}
+    .dh-math-card details>summary>span,.matrix-row-detail>summary>span{display:flex;flex-direction:column;gap:4px;min-width:0}
+    .dh-math-card details>summary strong,.matrix-row-detail>summary strong{font-size:12px;color:#e8e9eb}
+    .dh-math-card details>summary small,.matrix-row-detail>summary small{font:10px var(--mono);color:#8f949c;overflow-wrap:anywhere}
+    .dh-math-card details>summary>b,.matrix-row-detail>summary>b{font:600 9px var(--mono);letter-spacing:.06em;color:#ff858a;white-space:nowrap}
+    .dh-math-card details[open]>summary{border-bottom:1px solid var(--line)}
+    .matrix-derivation{padding:14px;display:flex;flex-direction:column;gap:10px}
+    .matrix-convention,.matrix-product-line{font:500 11px var(--mono);line-height:1.65;color:#d5d7db;background:#1a1d21;border:1px solid #333840;border-radius:7px;padding:10px 12px;overflow-wrap:anywhere}
+    .matrix-convention strong{color:#ff999d}
+    .matrix-row-detail{border:1px solid #30343a;border-radius:8px;background:#0d0f11;overflow:hidden}
+    .matrix-row-detail>summary{padding:12px 13px}
+    .matrix-row-detail[open]>summary{border-bottom:1px solid #30343a;background:#181a1e}
+    .matrix-factors{padding:12px;display:flex;flex-direction:column;gap:12px}
+    .matrix-factor-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    .matrix-block{min-width:0;border:1px solid #2e3339;border-radius:7px;background:#111417;padding:9px}
+    .matrix-block-label{font:600 10px var(--mono);color:#ff999d;margin-bottom:8px}
+    .matrix-scroll{max-width:100%;overflow-x:auto}
+    .math-matrix{width:100%;min-width:225px;border-collapse:collapse;font:10px var(--mono);font-variant-numeric:tabular-nums}
+    .math-matrix td{padding:5px 4px;text-align:right;border-top:1px solid #272c32;color:#dadddf;white-space:nowrap}
+    .math-matrix td:first-child{width:18px;text-align:center;color:#707780}
+    .matrix-total{border:1px solid #6a3439;border-radius:8px;background:#171214;padding:12px;display:flex;flex-direction:column;gap:10px}
+    .matrix-total .matrix-product-line{border-color:#633238;background:#291719;color:#ffd9da}
+    .matrix-total p{margin:0;font-size:10px;color:#a9a1a4}
+    @media(max-width:560px){.angle-combo select{flex-basis:128px;width:128px;padding:0 7px!important;font-size:10px!important}.angle-combo input{padding:0 10px!important;font-size:12px!important}.matrix-factor-grid{grid-template-columns:1fr}.dh-math-card details>summary,.matrix-row-detail>summary{align-items:flex-start}.dh-math-card details>summary>b,.matrix-row-detail>summary>b{font-size:8px}}
+
   </style>
   <script type="importmap">
     {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
@@ -167,6 +209,7 @@
           <div class="card dh-sequence-card"><div class="card-heading"><h3>Secuencia de parámetros D–H</h3><span id="sequenceStatus">ESPERANDO</span></div><div id="dhSequence" class="dh-sequence"></div></div>
           <div class="card readout-card"><div class="card-heading"><h3>Parámetros instantáneos</h3><span>VALORES RESUELTOS</span></div><div id="readoutGrid" class="readout-grid"></div></div>
           <div class="card matrix-card"><div class="card-heading"><h3>Matriz resultante T₀ₙ</h3><span>POSE ACTUAL</span></div><div id="matrixResult" class="matrix-wrap"></div></div>
+          <div class="card dh-math-card"><details id="matrixDerivationDetails"><summary><span><strong>Desarrollo matricial D–H</strong><small>Factores de cada fila y producto total T₀ₙ</small></span><b>VER MATRICES ＋</b></summary><div id="matrixDerivation" class="matrix-derivation"></div></details></div>
         </div>
         <aside class="side-panel">
           <div class="card side-card"><h3>Cadena configurada</h3><div id="chainSummary" class="chain-list"></div></div>
@@ -195,7 +238,7 @@
 
     const $ = (id) => document.getElementById(id);
     const defaults = () => ({
-      theta:{mode:'q',q0:0,amplitude:35,fixed:0},
+      theta:{mode:'q',q0:0,amplitude:35,fixed:0,implicitQ:false},
       d:{mode:'l',base:.25,amplitude:.08},
       a:{mode:'l',base:1,amplitude:.25},
       alpha:{fixed:0}
@@ -224,10 +267,10 @@
     $('beginSetup').addEventListener('click',beginWizard);
 
     function field(label,id,value,step='any',min=null,max=null){return `<div class="input-field"><label for="${id}">${label}</label><input id="${id}" type="number" step="${step}" value="${value}" ${min!==null?`min="${min}"`:''} ${max!==null?`max="${max}"`:''}></div>`;}
-    function choice(label,value,selected,sub=''){return `<button type="button" class="choice" data-choice="${value}" aria-pressed="${selected}">${label}${sub?`<br><em>${sub}</em>`:''}</button>`;}
+    function choice(label,value,selected,sub=''){return `<button type="button" class="choice" data-choice="${value}" aria-pressed="${selected}"><span>${label}</span>${sub?`<em>${sub}</em>`:''}</button>`;}
     function angleControl(label,id,valueDegrees,presetId){
       const current=Number(valueDegrees)||0;
-      return `<div class="angle-entry"><div class="input-field"><label for="${id}">${label}</label><input id="${id}" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="${format(current,3)}" placeholder="Ej. 45, π/2 o −π"><div class="angle-preview" id="${id}Preview">${format(current,2)}°</div></div><div class="input-field"><label for="${presetId}">VALOR CLÁSICO</label><select id="${presetId}"><option value="">Elegir múltiplo de π…</option>${anglePresets.map(([label,value])=>`<option value="${value}">${label}</option>`).join('')}</select></div></div>`;
+      return `<div class="angle-entry"><div class="input-field"><label for="${id}">${label}</label><div class="angle-combo"><input id="${id}" type="text" inputmode="decimal" autocomplete="off" spellcheck="false" value="${format(current,3)}" placeholder="Grados o π/2"><select id="${presetId}" aria-label="Seleccionar ángulo clásico"><option value="">π / fracciones</option>${anglePresets.map(([label,value])=>`<option value="${value}">${label}</option>`).join('')}</select></div><div class="angle-preview" id="${id}Preview">${format(current,2)}°</div></div></div>`;
     }
     function parseAngle(input){
       let raw=String(input??'').trim().toLowerCase().replace(/π/g,'pi').replace(/[−–]/g,'-').replace(/\s+/g,'').replace(',','.');
@@ -255,15 +298,17 @@
       $('nextStep').textContent=stepIndex===total-1?'Revisar parámetros →':'Continuar →';
       let title='',prompt='',body='';
       if(key==='theta'){
-        title='Ángulo θ';prompt='Selecciona el tipo de articulación y define su giro.';
-        body=`<span class="choice-label">TIPO DE ARTICULACIÓN</span><div class="choice-row" id="modeChoices">${choice('q(t) · Variable','q',p.mode==='q','rotacional')}${choice('θ · Constante','fixed',p.mode==='fixed','fijo')}</div><div id="thetaFields">${p.mode==='q'?`${angleControl('Ángulo base q₀ · grados o π','q0',p.q0,'q0Preset')}<div class="field-grid" style="margin-top:14px">${field('Amplitud de giro · grados','qAmp',p.amplitude,1,0,720)}</div>`:angleControl('Ángulo θ · grados o π','thetaFixed',p.fixed,'thetaPreset')}</div>`;
+        title='Ángulo θ';prompt='Selecciona el comportamiento de la articulación.';
+        const qImplicit=`<label class="implicit-q-option"><input id="implicitQ" type="checkbox" ${p.implicitQ?'checked':''}><span><strong>Articulación variable q sin valor explícito</strong><small>Pose inicial de +45° y arco CAD de recorrido simétrico.</small></span></label>`;
+        const qFields=p.mode==='q'?(p.implicitQ?'':`${angleControl('Ángulo base q₀','q0',p.q0,'q0Preset')}<div class="field-grid" style="margin-top:14px">${field('Amplitud de giro · grados','qAmp',p.amplitude,1,0,720)}</div>`):angleControl('Ángulo constante θ','thetaFixed',p.fixed,'thetaPreset');
+        body=`<span class="choice-label">TIPO DE ARTICULACIÓN</span><div class="choice-row" id="modeChoices">${choice('Variable','q',p.mode==='q','q(t) · rotacional')}${choice('Constante','fixed',p.mode==='fixed','θ · ángulo fijo')}</div>${p.mode==='q'?qImplicit:''}<div id="thetaFields">${qFields}</div>`;
       }else if(key==='d'||key==='a'){
-        title=`Distancia ${key}`;prompt=key==='d'?'Define cuánto avanza sobre el eje z.':'Define la longitud sobre el eje x.';
+        title=`Distancia ${key}`;prompt=key==='d'?'Desplazamiento sobre el eje z.':'Longitud sobre el eje x.';
         const unit=key==='d'?'Desplazamiento base':'Longitud base';
-        body=`<span class="choice-label">TIPO DE PARÁMETRO</span><div class="choice-row" id="modeChoices">${choice('l · Fija','l',p.mode==='l','constante')}${choice('d(t) · Variable','d',p.mode==='d','prismática')}</div><div id="distanceFields"><div class="field-grid">${field(unit,'distanceBase',p.base,.01,0)}${p.mode==='d'?field('Amplitud de recorrido','distanceAmp',p.amplitude,.01,0):''}</div></div>`;
+        body=`<span class="choice-label">TIPO DE PARÁMETRO</span><div class="choice-row" id="modeChoices">${choice('Variable','d',p.mode==='d','d(t) · prismática')}${choice('Constante','l',p.mode==='l','l · longitud fija')}</div><div id="distanceFields"><div class="field-grid">${field(unit,'distanceBase',p.base,.01,0)}${p.mode==='d'?field('Amplitud de recorrido','distanceAmp',p.amplitude,.01,0):''}</div></div>`;
       }else{
-        title='Ángulo α';prompt='Define la torsión alrededor del eje x.';
-        body=angleControl('Ángulo α · grados o π','alphaFixed',p.fixed,'alphaPreset');
+        title='Ángulo α';prompt='Ángulo de torsión alrededor del eje x.';
+        body=angleControl('Ángulo constante α','alphaFixed',p.fixed,'alphaPreset');
       }
       $('wizardCard').innerHTML=`<div class="wizard-meta"><span class="movement-chip">MOV. ${String(rowIndex+1).padStart(2,'0')}</span><span class="param-name">${names[key]}</span></div><h2 class="wizard-title">${title}</h2><p class="wizard-prompt">${prompt}</p>${body}`;
       $('wizardCard').classList.remove('wizard-card');void $('wizardCard').offsetWidth;$('wizardCard').classList.add('wizard-card');
@@ -279,12 +324,18 @@
         const {rowIndex,key}=currentStep;const selected=btn.dataset.choice;
         if(key==='theta'){
           const p=rows[rowIndex].theta;
-          if(selected==='fixed'&&p.mode!=='fixed')p.fixed=p.q0;
+          if(selected==='fixed'&&p.mode!=='fixed'){p.fixed=p.implicitQ?45:p.q0;p.implicitQ=false;}
           if(selected==='q'&&p.mode!=='q')p.q0=p.fixed;
           p.mode=selected;
         }else{rows[rowIndex][key].mode=selected;}
         renderWizard();
       }));
+      const implicit=$('implicitQ');
+      if(implicit)implicit.addEventListener('change',()=>{
+        if(!saveCurrentStep()){implicit.checked=!implicit.checked;return;}
+        rows[currentStep.rowIndex].theta.implicitQ=implicit.checked;
+        renderWizard();
+      });
     }
     function saveCurrentStep(){
       if(!currentStep)return true;const {rowIndex,key}=currentStep;
@@ -292,7 +343,7 @@
         if(key==='theta'){
           const p=rows[rowIndex].theta;
           if(p.mode==='q'){
-            p.q0=angleDegrees($('q0')?.value??p.q0);p.amplitude=Math.max(0,Number($('qAmp')?.value??p.amplitude)||0);
+            if(!p.implicitQ){p.q0=angleDegrees($('q0')?.value??p.q0);p.amplitude=Math.max(0,Number($('qAmp')?.value??p.amplitude)||0);}
           }else p.fixed=angleDegrees($('thetaFixed')?.value??p.fixed);
         }else if(key==='d'||key==='a'){
           const p=rows[rowIndex][key];p.base=Math.max(0,Number($('distanceBase')?.value??p.base)||0);if(p.mode==='d')p.amplitude=Math.max(0,Number($('distanceAmp')?.value??p.amplitude)||0);
@@ -303,7 +354,7 @@
     function showReview(){
       $('wizard').classList.add('hidden');$('reviewScreen').classList.remove('hidden');$('setupKicker').textContent='REVISIÓN';$('stepCount').textContent=`${rows.length} MOVIMIENTOS`;
       const labels=['θ','d','a','α'];const keys=['theta','d','a','alpha'];
-      const summary=(p,key)=>{if(key==='theta')return p.mode==='q'?`q(t) · q₀ ${format(p.q0,1)}° · A ${format(p.amplitude,1)}°`:`${format(p.fixed,1)}° · fijo`;if(key==='alpha')return `${format(p.fixed,1)}°`;return p.mode==='l'?`l = ${format(p.base)}`:`d(t) = ${format(p.base)} + ${format(p.amplitude)}`;};
+      const summary=(p,key)=>{if(key==='theta')return p.mode==='q'?(p.implicitQ?'q variable · pose inicial +45°':`q(t) · q₀ ${format(p.q0,1)}° · A ${format(p.amplitude,1)}°`):`${format(p.fixed,1)}° · constante`;if(key==='alpha')return `${format(p.fixed,1)}° · constante`;return p.mode==='d'?`d(t) = ${format(p.base)} + ${format(p.amplitude)} · variable`:`l = ${format(p.base)} · constante`;};
       $('reviewTable').innerHTML=`<table class="review-table"><thead><tr><th>#</th>${labels.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map((r,i)=>`<tr><td style="font:600 11px var(--mono);color:#898c92">${i+1}</td>${keys.map(k=>`<td><button class="review-cell" type="button" data-row="${i}" data-key="${k}">${summary(r[k],k)}<small>Editar</small></button></td>`).join('')}</tr>`).join('')}</tbody></table>`;
       $('reviewTable').querySelectorAll('[data-row]').forEach(btn=>btn.addEventListener('click',()=>{const target=steps.findIndex(s=>s.rowIndex===Number(btn.dataset.row)&&s.key===btn.dataset.key);if(target>=0){stepIndex=target;$('reviewScreen').classList.add('hidden');$('wizard').classList.remove('hidden');$('setupKicker').textContent='CONFIGURACIÓN';renderWizard();}}));
     }
@@ -346,10 +397,28 @@
       dim.arrowA.scale.set(1,Math.max(.55,h/.12),1);dim.arrowB.scale.set(1,Math.max(.55,h/.12),1);
       dim.label.position.copy(start).add(end).multiplyScalar(.5).add(offsetVector.clone().multiplyScalar(.85));dim.label.userData.setText(labelText);
     }
+    function makeAngularDimension(){
+      const group=new THREE.Group(),arc=makeLine(0xf06b70),startGuide=makeLine(0xf06b70),endGuide=makeLine(0xf06b70),zeroGuide=makeLine(0x777d86,true);
+      const arrowMat=new THREE.MeshStandardMaterial({color:0xf06b70,emissive:0x6a171c,emissiveIntensity:.55,depthTest:false});
+      const arrowStart=new THREE.Mesh(new THREE.ConeGeometry(.035,.12,10),arrowMat),arrowEnd=new THREE.Mesh(new THREE.ConeGeometry(.035,.12,10),arrowMat);
+      const label=makeTextSprite('q',{color:'#ff969a',border:'rgba(240,68,73,.8)',scaleX:.25,scaleY:.075,fontSize:38});
+      const radius=.43,outer=radius+.09,angles=[];
+      for(let i=0;i<=48;i++)angles.push(-Math.PI/4+(Math.PI/2)*i/48);
+      const pts=angles.map(a=>new THREE.Vector3(radius*Math.cos(a),radius*Math.sin(a),.012));
+      arc.geometry.dispose();arc.geometry=new THREE.BufferGeometry().setFromPoints(pts);
+      const p0=new THREE.Vector3(radius,0,.008);updateLine(zeroGuide,new THREE.Vector3(),new THREE.Vector3(outer+.05,0,.008));
+      const pA=new THREE.Vector3(radius*Math.cos(-Math.PI/4),radius*Math.sin(-Math.PI/4),.012),pB=new THREE.Vector3(radius*Math.cos(Math.PI/4),radius*Math.sin(Math.PI/4),.012);
+      updateLine(startGuide,pA,pA.clone().multiplyScalar(outer/radius));updateLine(endGuide,pB,pB.clone().multiplyScalar(outer/radius));
+      const tangentA=new THREE.Vector3(Math.SQRT1_2,Math.SQRT1_2,0),tangentB=new THREE.Vector3(-Math.SQRT1_2,Math.SQRT1_2,0);
+      arrowStart.position.copy(pA);arrowStart.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),tangentA);
+      arrowEnd.position.copy(pB);arrowEnd.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),tangentB);
+      label.position.set(0,radius+.19,.02);group.add(arc,startGuide,endGuide,zeroGuide,arrowStart,arrowEnd,label);group.visible=false;
+      return{group};
+    }
     function rzTz(theta,d){const c=Math.cos(theta),s=Math.sin(theta);return new THREE.Matrix4().set(c,-s,0,0,s,c,0,0,0,0,1,d,0,0,0,1)}
     function smooth01(x){x=Math.max(0,Math.min(1,x));return x*x*(3-2*x)}
     function targetValues(row){
-      const theta=row.theta.mode==='q'?THREE.MathUtils.degToRad(row.theta.q0+row.theta.amplitude):THREE.MathUtils.degToRad(row.theta.fixed);
+      const theta=row.theta.mode==='q'?(row.theta.implicitQ?THREE.MathUtils.degToRad(45):THREE.MathUtils.degToRad(row.theta.q0+row.theta.amplitude)):THREE.MathUtils.degToRad(row.theta.fixed);
       const d=row.d.mode==='d'?row.d.base+row.d.amplitude:row.d.base;
       const a=row.a.mode==='d'?row.a.base+row.a.amplitude:row.a.base;
       return{theta,d,a,alpha:THREE.MathUtils.degToRad(row.alpha.fixed)};
@@ -387,9 +456,9 @@
       for(let i=0;i<rows.length;i++){
         const frame=new THREE.Group();addAxes(frame,axisLength*1.04);const dot=new THREE.Mesh(new THREE.SphereGeometry(.055,16,12),new THREE.MeshStandardMaterial({color:0xffffff,emissive:0x777777,emissiveIntensity:.7}));frame.add(dot);const name=makeTextSprite(`O${i+1}`,{scaleX:.25,scaleY:.085,fontSize:40});name.position.set(0,0,-.19);frame.add(name);frame.visible=false;rootGroup.add(frame);frameGroups.push(frame);
         const dRod=makeRod(0x9da2aa),aRod=makeRod(0xd0d2d6);rootGroup.add(dRod,aRod);
-        const dDimension=makeDimension(0xf06b70),aDimension=makeDimension(0xc5cbd3);rootGroup.add(dDimension.group,aDimension.group);
+        const dDimension=makeDimension(0xf06b70),aDimension=makeDimension(0xc5cbd3),qDimension=makeAngularDimension();rootGroup.add(dDimension.group,aDimension.group,qDimension.group);
         const joint=new THREE.Mesh(new THREE.SphereGeometry(.075,18,14),new THREE.MeshStandardMaterial({color:0xf04449,metalness:.35,roughness:.34,emissive:0x66191d,emissiveIntensity:.65}));rootGroup.add(joint);
-        segmentObjects.push({dRod,aRod,dDimension,aDimension,joint});
+        segmentObjects.push({dRod,aRod,dDimension,aDimension,qDimension,joint});
       }
       pointMarker=new THREE.Mesh(new THREE.SphereGeometry(.085,18,12),new THREE.MeshStandardMaterial({color:0xf2f2f2,emissive:0x888888,emissiveIntensity:.7}));pointMarker.visible=false;scene.add(pointMarker);pointLine=makeLine(0xf04449,true);pointLine.visible=false;scene.add(pointLine);
       clock=new THREE.Clock();clock.start();resizeRenderer();window.addEventListener('resize',resizeRenderer);if('ResizeObserver'in window){resizeObserver=new ResizeObserver(resizeRenderer);resizeObserver.observe($('viewport').parentElement)}animate(animationToken);
@@ -409,6 +478,7 @@
         const A=new THREE.Vector3().setFromMatrixPosition(prev),B=new THREE.Vector3().setFromMatrixPosition(afterD),C=new THREE.Vector3().setFromMatrixPosition(afterA);const position=new THREE.Vector3(),q=new THREE.Quaternion();next.decompose(position,q,new THREE.Vector3());
         const frame=frameGroups[i+1];frame.visible=started;frame.position.copy(position);frame.quaternion.copy(q);
         const obj=segmentObjects[i];obj.dRod.visible=started&&d>.012;obj.aRod.visible=started&&a>.012;obj.dRod.userData.update(A,B);obj.aRod.userData.update(B,C);obj.joint.visible=started;obj.joint.position.copy(B);
+        const prevPosition=new THREE.Vector3(),prevQuaternion=new THREE.Quaternion();prev.decompose(prevPosition,prevQuaternion,new THREE.Vector3());obj.qDimension.group.visible=started&&!!row.theta.implicitQ;obj.qDimension.group.position.copy(B);obj.qDimension.group.quaternion.copy(prevQuaternion);
         const active=!isComplete&&i===activeRow;obj.dRod.material.emissive.setHex(active?0x501317:0x000000);obj.aRod.material.emissive.setHex(active?0x501317:0x000000);
         const xAxis=new THREE.Vector3(1,0,0).transformDirection(rotated),yAxis=new THREE.Vector3(0,1,0).transformDirection(rotated);
         updateDimension(obj.dDimension,A,B,xAxis.clone().multiplyScalar(.19),`d${i+1} = ${format(d)}`);
@@ -420,11 +490,28 @@
     }
     function updateReadouts(instant,activeRow=-1){$('readoutGrid').innerHTML=instant.map((v,i)=>`<div class="readout-item ${i===activeRow?'current':''}"><div class="r-title">O${i} → O${i+1}</div><div class="r-values">θ ${fmtAngle(v.theta)}<br>d ${format(v.d)}<br>a ${format(v.a)}<br>α ${fmtAngle(v.alpha)}</div></div>`).join('');$('dhSequence').querySelectorAll('.dh-row').forEach((row,i)=>{const v=instant[i];if(!v)return;const values=[fmtAngle(v.theta),format(v.d),format(v.a),fmtAngle(v.alpha)];row.querySelectorAll('[data-cell]').forEach((cell,j)=>{cell.innerHTML=`${['θ','d','a','α'][j]}${i+1}<br><small>${values[j]}</small>`})})}
     function updateMatrixReadout(m){const e=m.elements;const matrix=[[e[0],e[4],e[8],e[12]],[e[1],e[5],e[9],e[13]],[e[2],e[6],e[10],e[14]],[e[3],e[7],e[11],e[15]]];$('matrixResult').innerHTML=`<table class="matrix"><tbody>${matrix.map((r,i)=>`<tr><td>${i+1}</td>${r.map(v=>`<td>${format(v,4)}</td>`).join('')}</tr>`).join('')}</tbody></table>`}
+    function matrixRows(m){const e=m.elements;return [[e[0],e[4],e[8],e[12]],[e[1],e[5],e[9],e[13]],[e[2],e[6],e[10],e[14]],[e[3],e[7],e[11],e[15]]];}
+    function matrixTableHTML(m,label){const data=matrixRows(m);return `<div class="matrix-block"><div class="matrix-block-label">${label}</div><div class="matrix-scroll"><table class="matrix math-matrix"><tbody>${data.map((r,i)=>`<tr><td>${i+1}</td>${r.map(v=>`<td>${format(v,4)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`}
+    function renderMatrixDerivation(){
+      const rowMatrices=[];const rowHTML=rows.map((row,i)=>{
+        const v=targetValues(row),factors=[
+          {label:`Rz(θ${i+1})`,m:new THREE.Matrix4().makeRotationZ(v.theta)},
+          {label:`Tz(d${i+1})`,m:new THREE.Matrix4().makeTranslation(0,0,v.d)},
+          {label:`Tx(a${i+1})`,m:new THREE.Matrix4().makeTranslation(v.a,0,0)},
+          {label:`Rx(α${i+1})`,m:new THREE.Matrix4().makeRotationX(v.alpha)}
+        ];
+        const A=factors.reduce((acc,f)=>acc.multiply(f.m.clone()),new THREE.Matrix4().identity());rowMatrices.push(A);
+        const thetaNote=row.theta.implicitQ?'q implícita · referencia +45°':row.theta.mode==='q'?`q₀=${format(row.theta.q0,2)}°; amplitud=${format(row.theta.amplitude,2)}°`:`θ=${format(row.theta.fixed,2)}°`;
+        return `<details class="matrix-row-detail"><summary><span><strong>Fila ${i+1} · A${i+1}</strong><small>${thetaNote} · d=${format(v.d)} · a=${format(v.a)} · α=${fmtAngle(v.alpha)}</small></span><b>DESARROLLAR ＋</b></summary><div class="matrix-factors"><div class="matrix-product-line">A${i+1} = Rz(θ${i+1}) · Tz(d${i+1}) · Tx(a${i+1}) · Rx(α${i+1})</div><div class="matrix-factor-grid">${factors.map(f=>matrixTableHTML(f.m,f.label)).join('')}</div>${matrixTableHTML(A,`Resultado A${i+1}`)}</div></details>`;
+      }).join('');
+      const total=rowMatrices.reduce((acc,m)=>acc.multiply(m.clone()),new THREE.Matrix4().identity());
+      $('matrixDerivation').innerHTML=`<div class="matrix-convention">Convención estándar: <strong>Aᵢ = Rz(θᵢ) · Tz(dᵢ) · Tx(aᵢ) · Rx(αᵢ)</strong></div>${rowHTML}<section class="matrix-total"><div class="matrix-product-line">T₀ₙ = ${rowMatrices.map((_,i)=>`A${i+1}`).join(' · ')}</div><p>Multiplicación acumulada de las matrices de todas las filas, en orden.</p>${matrixTableHTML(total,'Transformación total T₀ₙ')}</section>`;
+    }
     function animate(token){if(!sceneReady||token!==animationToken)return;requestAnimationFrame(()=>animate(token));const delta=Math.min(clock.getDelta(),.05);if(running){simTime+=delta*speed;evaluatePose(simTime)}orbit.update();renderer.render(scene,camera)}
     function showScene(){
       $('setupPanel').classList.add('hidden');$('sceneSection').classList.remove('hidden');$('sceneSection').scrollIntoView({behavior:'smooth',block:'start'});
-      $('chainSummary').innerHTML=rows.map((r,i)=>`<div class="chain-item"><span>O${i} → O${i+1}</span><strong>${r.theta.mode==='q'?'q(t)':'θ fija'} · ${r.d.mode==='d'||r.a.mode==='d'?'variable':'fijo'}</strong></div>`).join('');
-      $('readoutGrid').innerHTML='';$('pointResult').innerHTML='<div class="result-placeholder">Se transformará respecto a la pose final Oₙ.</div>';pointHasBeenCalculated=false;pointMarker&&(pointMarker.visible=false);pointLine&&(pointLine.visible=false);finalTransform=calculateFinalTransform();sceneReady=true;animationToken++;running=true;simTime=0;createSceneSequence();initScene();evaluatePose(0);$('playPause').textContent='Ⅱ Pausar';
+      $('chainSummary').innerHTML=rows.map((r,i)=>`<div class="chain-item"><span>O${i} → O${i+1}</span><strong>${r.theta.mode==='q'?(r.theta.implicitQ?'q implícita':'q(t)'):'θ constante'} · ${r.d.mode==='d'||r.a.mode==='d'?'distancia variable':'distancia constante'}</strong></div>`).join('');
+      $('readoutGrid').innerHTML='';$('pointResult').innerHTML='<div class="result-placeholder">Se transformará respecto a la pose final Oₙ.</div>';pointHasBeenCalculated=false;pointMarker&&(pointMarker.visible=false);pointLine&&(pointLine.visible=false);finalTransform=calculateFinalTransform();renderMatrixDerivation();sceneReady=true;animationToken++;running=true;simTime=0;createSceneSequence();initScene();evaluatePose(0);$('playPause').textContent='Ⅱ Pausar';
     }
     $('generateScene').addEventListener('click',showScene);
     $('editConfig').addEventListener('click',()=>{
