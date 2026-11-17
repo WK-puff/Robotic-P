@@ -1,360 +1,293 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Analizador Cinemático D-H Multiplataforma</title>
-    <!-- Tailwind CSS para diseño moderno -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Three.js y OrbitControls -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <style>
-        body { margin: 0; overflow: hidden; background-color: #0f172a; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
-        canvas { display: block; width: 100vw; height: 100vh; }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#08111f" />
+  <meta name="description" content="Laboratorio interactivo de cinemática directa Denavit–Hartenberg con Three.js." />
+  <title>DH Motion Lab · Cinemática 3D</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root{color-scheme:dark;--bg:#07101d;--panel:#101c2d;--panel2:#142238;--line:#27374d;--muted:#93a6bd;--text:#ecf3fb;--cyan:#55d6e8;--blue:#4b8cff;--green:#35cf9b;--amber:#ffca68;--red:#ff626f}
+    *{box-sizing:border-box}html{background:var(--bg);scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 50% -12%,#19304b 0%,#0a1525 40%,#070e19 100%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+    button,input,select{font:inherit}button{cursor:pointer}.app{max-width:1440px;margin:0 auto;padding:22px clamp(14px,3vw,36px) 44px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:24px}.brand{display:flex;align-items:center;gap:12px}.brand-mark{width:42px;height:42px;border-radius:14px;background:linear-gradient(145deg,#36d4df,#3774f6);display:grid;place-items:center;box-shadow:0 8px 26px #1d8dc744}.brand-mark svg{width:24px;height:24px}.eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:.2em;color:#79b7cb;font-weight:800}.brand h1{font-size:18px;line-height:1.15;margin:3px 0 0;font-weight:800;letter-spacing:-.03em}.top-chip{border:1px solid #28415b;background:#0f1d30;color:#b8cbe0;border-radius:999px;padding:8px 12px;font-size:11px;white-space:nowrap}.hero{margin:8px 0 22px;max-width:820px}.hero h2{font-size:clamp(25px,4vw,38px);line-height:1.08;letter-spacing:-.045em;margin:0 0 10px;font-weight:800}.hero h2 span{background:linear-gradient(90deg,#67e4e8,#78a8ff);-webkit-background-clip:text;background-clip:text;color:transparent}.hero p{margin:0;color:#a8b8cb;font-size:14px;line-height:1.65;max-width:760px}.panel{background:linear-gradient(150deg,rgba(18,32,51,.96),rgba(11,23,38,.96));border:1px solid #263a52;border-radius:20px;box-shadow:0 20px 70px #0003}.setup-panel{padding:clamp(16px,2.5vw,26px)}.section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:18px}.section-head h3,.panel-title{margin:0;font-size:16px;font-weight:800;letter-spacing:-.02em}.section-head p{margin:5px 0 0;font-size:12px;color:var(--muted);line-height:1.5}.step-tag{display:inline-flex;align-items:center;gap:7px;color:#8ee8e8;font-size:11px;font-weight:700;letter-spacing:.04em}.step-dot{width:7px;height:7px;background:#42d9c6;border-radius:50%;box-shadow:0 0 14px #42d9c6}.count-control{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:17px;padding:13px 14px;border-radius:13px;background:#0b1728;border:1px solid #24364c}.count-label{font-size:12px;color:#c2d1e2;font-weight:700}.count-value{font-size:12px;color:#8ea6bf;min-width:68px}.count-buttons{display:flex;align-items:center;gap:6px}.icon-btn{width:30px;height:30px;border:1px solid #334b66;border-radius:9px;background:#14253a;color:#e5f3ff;font-size:17px;display:grid;place-items:center}.icon-btn:disabled{opacity:.35;cursor:not-allowed}.count-num{min-width:24px;text-align:center;font-weight:800;font-variant-numeric:tabular-nums}.count-hint{margin-left:auto;font-size:11px;color:#7f95ad}
+    .table-wrap{overflow-x:auto;border:1px solid #2b4058;border-radius:13px}table{width:100%;border-collapse:collapse;min-width:600px}thead th{padding:12px 10px;background:#17283e;color:#bcd1e5;text-align:center;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;border-bottom:1px solid #2b4058}thead th:first-child{width:56px}tbody td{padding:8px;text-align:center;border-bottom:1px solid #1d3046}tbody tr:last-child td{border-bottom:0}.row-num{color:#8da7c0;font-weight:800;font-size:12px}.param-cell{width:100%;min-height:55px;padding:8px 10px;border-radius:10px;border:1px solid #2d4661;background:#0e1c2e;color:#ecf4fc;text-align:left;transition:.18s;display:flex;flex-direction:column;justify-content:center;gap:4px}.param-cell:hover,.param-cell:focus-visible{border-color:#58cbd8;background:#132942;outline:none;box-shadow:0 0 0 3px #48c9d51c}.param-main{font-size:13px;font-weight:800}.param-sub{font-size:10px;color:#88a2bc}.param-cell[data-kind="variable"] .param-main{color:#72e4d0}.param-cell[data-kind="fixed"] .param-main{color:#e6c58d}.table-note{padding:10px 12px;background:#0c1929;color:#90a6bd;font-size:11px;line-height:1.5;border-top:1px solid #23374e}.table-note strong{color:#d4e5f6}.setup-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:18px;flex-wrap:wrap}.legend{display:flex;gap:13px;flex-wrap:wrap;color:#91a7be;font-size:10px}.legend span{display:flex;align-items:center;gap:6px}.legend i{width:7px;height:7px;border-radius:3px;display:inline-block}.btn-primary{border:0;border-radius:12px;padding:12px 17px;background:linear-gradient(100deg,#25b9c6,#497ef4);color:#061421;font-size:12px;font-weight:900;letter-spacing:.01em;box-shadow:0 8px 24px #2885d744;transition:transform .15s,filter .15s}.btn-primary:hover{transform:translateY(-1px);filter:brightness(1.08)}.btn-secondary{border:1px solid #344c67;border-radius:11px;padding:10px 13px;background:#14253a;color:#d6e6f5;font-size:11px;font-weight:700}.btn-secondary:hover{border-color:#5c9ebc;background:#1a3049}.btn-quiet{border:1px solid transparent;padding:8px 10px;color:#96adc5;background:transparent;font-size:11px}.btn-quiet:hover{color:white}.hidden{display:none!important}
+    .scene-layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:16px;align-items:start}.scene-main{min-width:0}.viewport-panel{overflow:hidden}.viewport-head{padding:15px 17px;border-bottom:1px solid #293d55;display:flex;align-items:center;justify-content:space-between;gap:12px}.viewport-head h3{font-size:14px;margin:0;font-weight:800}.live-pill{display:inline-flex;align-items:center;gap:6px;color:#77e4c7;font-size:10px;font-weight:800;letter-spacing:.08em}.live-pill:before{content:"";width:6px;height:6px;border-radius:50%;background:#38daa7;box-shadow:0 0 10px #38daa7}.canvas-wrap{height:min(60vh,580px);min-height:350px;position:relative;background:radial-gradient(ellipse at center,#12253b,#0a1422 72%)}#viewport{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}.view-hint{position:absolute;left:14px;top:13px;pointer-events:none;color:#839ab3;font-size:10px;background:#071321b8;border:1px solid #29415a;border-radius:8px;padding:7px 9px}.axis-legend{position:absolute;right:13px;top:13px;display:flex;gap:8px;background:#071321c9;border:1px solid #29415a;border-radius:8px;padding:7px 9px;font-size:10px;color:#a9bbce}.axis-legend b{font-weight:900}.axis-x{color:#ff727d}.axis-y{color:#45d69e}.axis-z{color:#65a4ff}.viewport-foot{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding:12px 15px;border-top:1px solid #293d55;background:#0e1a2a}.control-label{font-size:10px;color:#9ab0c7}.speed-control{display:flex;align-items:center;gap:8px;min-width:190px;flex:1}.speed-control input{width:100%;accent-color:#45d3db}.speed-value{font-size:10px;color:#d2e1ef;min-width:36px;text-align:right;font-variant-numeric:tabular-nums}.side-panel{display:flex;flex-direction:column;gap:14px}.side-card{padding:15px}.side-card h3{margin:0 0 11px;font-size:12px;font-weight:800;letter-spacing:.01em}.legend-list{display:flex;flex-direction:column;gap:8px}.legend-row{display:flex;align-items:center;justify-content:space-between;gap:8px;color:#99aec4;font-size:10px}.legend-row strong{color:#dce9f5;font-weight:800}.legend-row .unit{color:#7893ae}.point-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.field{display:flex;flex-direction:column;gap:5px}.field label{font-size:10px;color:#9eb4ca;font-weight:700}.field input,.field select,.modal-field input,.modal-field select{width:100%;min-width:0;border:1px solid #30465f;border-radius:9px;background:#091727;color:#eaf3fb;padding:9px 10px;font-size:12px;outline:none}.field input:focus,.modal-field input:focus,.modal-field select:focus{border-color:#53cbd7;box-shadow:0 0 0 3px #53cbd71a}.point-actions{display:flex;align-items:center;gap:8px;margin-top:10px}.point-actions .btn-primary{flex:1;padding:10px 11px}.follow-row{margin-top:10px;display:flex;align-items:center;gap:7px;font-size:10px;color:#a2b5c8}.follow-row input{accent-color:#43d4c2}.result-box{margin-top:11px;border:1px solid #254862;background:#0b1d2c;border-radius:10px;padding:10px}.result-box .result-title{font-size:10px;color:#7ddfd4;font-weight:800;margin-bottom:6px}.result-vector{font:11px ui-monospace,SFMono-Regular,Consolas,monospace;color:#e0efff;line-height:1.65;overflow-wrap:anywhere}.result-placeholder{font-size:10px;line-height:1.5;color:#8198b1}.readout-wrap{margin-top:16px;padding:15px}.readout-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}.readout-head h3{font-size:13px;margin:0;font-weight:800}.readout-head span{font-size:10px;color:#829bb4}.readout-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.readout-item{padding:10px;border:1px solid #293e55;background:#0d1b2c;border-radius:10px;min-width:0}.readout-item .r-title{font-size:10px;color:#8ba6c0;font-weight:800;margin-bottom:5px}.readout-item .r-values{font:10px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;color:#d9e9f8;overflow-wrap:anywhere}.formula-panel{margin-top:14px;padding:14px 16px;color:#9bb0c5;font-size:11px;line-height:1.6}.formula-panel strong{color:#dce9f6}.formula{display:block;margin-top:8px;padding:10px 12px;border:1px solid #263d56;border-radius:9px;background:#091727;color:#bfe3ed;font:11px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;overflow-x:auto;white-space:nowrap}.scene-top-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.status-note{margin-top:10px;color:#8298b0;font-size:10px;line-height:1.5}
+    dialog{width:min(500px,calc(100vw - 24px));max-height:min(88vh,800px);padding:0;border:1px solid #36516d;border-radius:18px;background:#101e30;color:var(--text);box-shadow:0 24px 100px #000a}dialog::backdrop{background:#020811bf;backdrop-filter:blur(5px)}.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:15px;padding:18px 19px;border-bottom:1px solid #2b4058}.modal-head h3{margin:0;font-size:16px;font-weight:850}.modal-head p{margin:5px 0 0;color:#8da5bd;font-size:11px}.modal-body{padding:18px 19px;max-height:60vh;overflow:auto}.modal-foot{display:flex;justify-content:flex-end;gap:8px;padding:14px 19px;border-top:1px solid #2b4058}.modal-field{display:flex;flex-direction:column;gap:6px;margin-bottom:13px}.modal-field label{font-size:11px;color:#a9bfd4;font-weight:700}.modal-field small{font-size:10px;line-height:1.45;color:#7892ad}.radio-stack{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:15px}.radio-card{position:relative;border:1px solid #304861;border-radius:10px;padding:10px;background:#0b1929;cursor:pointer}.radio-card:has(input:checked){border-color:#4fcbd3;background:#10283b}.radio-card input{accent-color:#4ed2d0;margin-right:5px}.radio-card span{font-size:11px;font-weight:800}.radio-card small{display:block;margin:5px 0 0 20px;color:#8099b2;font-size:10px}.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.footer-note{text-align:center;margin:19px 0 0;color:#5f7791;font-size:10px}.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#d8fff2;color:#06241e;border-radius:10px;padding:10px 14px;font-size:11px;font-weight:800;box-shadow:0 10px 30px #0005;transition:.2s;z-index:20}.toast.show{opacity:1;transform:translate(-50%,0)}
+    @media(max-width:980px){.scene-layout{grid-template-columns:minmax(0,1fr) 280px}.readout-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:760px){.app{padding:16px 12px 32px}.topbar{margin-bottom:19px}.top-chip{font-size:9px}.hero{margin-bottom:16px}.hero p{font-size:12px}.scene-layout{grid-template-columns:1fr}.side-panel{display:grid;grid-template-columns:1fr 1fr}.point-card{grid-column:1/-1}.canvas-wrap{height:52vh;min-height:310px}.readout-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.scene-top-actions{justify-content:flex-end}}
+    @media(max-width:480px){.brand h1{font-size:15px}.brand-mark{width:37px;height:37px}.top-chip{display:none}.section-head{flex-direction:column}.count-hint{width:100%;margin:0}.setup-actions{align-items:stretch}.setup-actions .btn-primary{width:100%}.legend{order:2}.side-panel{grid-template-columns:1fr}.point-card{grid-column:auto}.viewport-head{align-items:flex-start;flex-direction:column}.canvas-wrap{min-height:290px;height:48vh}.axis-legend{font-size:9px;gap:6px}.view-hint{font-size:9px}.readout-grid{grid-template-columns:1fr 1fr}.radio-stack{grid-template-columns:1fr}.modal-grid{grid-template-columns:1fr 1fr}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto;transition:none!important}}
+  </style>
 </head>
-<body class="flex h-screen overflow-hidden">
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M5 18.5 12 5l7 13.5M8 13h8M12 5v14" stroke="#061421" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="5" r="2" fill="#061421"/></svg></div>
+        <div><div class="eyebrow">Laboratorio de robótica</div><h1>DH MOTION LAB</h1></div>
+      </div>
+      <div class="top-chip">DENAVIT–HARTENBERG · THREE.JS</div>
+    </header>
 
-    <!-- Panel Lateral de Control -->
-    <aside class="w-[450px] bg-slate-900/95 backdrop-blur border-r border-slate-800 flex flex-col z-10 shadow-2xl overflow-y-auto">
-        <div class="p-5 border-b border-slate-800">
-            <h1 class="text-xl font-bold text-sky-400">Cinemática Denavit-Hartenberg</h1>
-            <p class="text-xs text-slate-400 mt-1">Simulador 3D Interactivo para GitHub Pages</p>
+    <section class="hero">
+      <h2>Construye tu cadena.<br><span>Observa cómo se mueve.</span></h2>
+      <p>Configura cada transformación DH, confirma los parámetros y explora la cadena robótica en 3D. Al final, transforma cualquier punto expresado en el último sistema móvil al sistema fijo original.</p>
+    </section>
+
+    <section id="setup" class="panel setup-panel">
+      <div class="section-head">
+        <div><div class="step-tag"><i class="step-dot"></i> PASO 1 · CONFIGURACIÓN</div><h3 style="margin-top:7px">Define los movimientos de tu mecanismo</h3><p>Selecciona de 3 a 6 filas. Toca cualquier parámetro de la tabla para editarlo.</p></div>
+        <div class="top-chip">Orden DH estándar</div>
+      </div>
+      <div class="count-control">
+        <span class="count-label">Cantidad de movimientos</span>
+        <div class="count-buttons"><button id="removeRow" class="icon-btn" type="button" aria-label="Quitar fila">−</button><strong id="rowCount" class="count-num">3</strong><button id="addRow" class="icon-btn" type="button" aria-label="Agregar fila">+</button></div>
+        <span id="countHint" class="count-value">3 de 6 filas</span>
+        <span class="count-hint">Mínimo 3 · Máximo 6</span>
+      </div>
+      <div class="table-wrap">
+        <table aria-label="Tabla de parámetros Denavit Hartenberg">
+          <thead><tr><th>#</th><th>θ (theta)</th><th>d</th><th>a</th><th>α (alpha)</th></tr></thead>
+          <tbody id="parameterRows"></tbody>
+        </table>
+        <div class="table-note"><strong>Cómo se interpreta:</strong> θ y α se expresan en grados en el editor; las distancias usan unidades arbitrarias consistentes. <strong>q</strong> representa una articulación rotacional variable; <strong>l</strong>, una distancia fija; <strong>d(t)</strong>, una distancia prismática variable.</div>
+      </div>
+      <div class="setup-actions">
+        <div class="legend"><span><i style="background:#63dfc7"></i> Variable / articulación</span><span><i style="background:#e6c58d"></i> Valor fijo</span><span><i style="background:#75aaff"></i> Toca para editar</span></div>
+        <button id="finalize" class="btn-primary" type="button">Finalizar parámetros y generar escena <span aria-hidden="true">→</span></button>
+      </div>
+    </section>
+
+    <section id="sceneSection" class="hidden" aria-label="Simulación 3D">
+      <div class="scene-top-actions" style="justify-content:space-between;margin:2px 0 12px">
+        <div><div class="step-tag"><i class="step-dot"></i> PASO 2 · SIMULACIÓN</div><div style="font-size:13px;color:#c5d8e9;font-weight:800;margin-top:5px">Cadena cinemática en tiempo real</div></div>
+        <button id="editConfig" class="btn-secondary" type="button">← Editar parámetros</button>
+      </div>
+      <div class="scene-layout">
+        <div class="scene-main">
+          <div class="panel viewport-panel">
+            <div class="viewport-head"><h3>Vista tridimensional · Sistemas O₀ a Oₙ</h3><span class="live-pill">ANIMACIÓN EN BUCLE</span></div>
+            <div class="canvas-wrap"><canvas id="viewport" aria-label="Escena 3D interactiva de la cadena robótica"></canvas><div class="view-hint">Arrastra para orbitar · rueda o pellizca para zoom</div><div class="axis-legend"><span><b class="axis-x">X</b> rojo</span><span><b class="axis-y">Y</b> verde</span><span><b class="axis-z">Z</b> azul</span></div></div>
+            <div class="viewport-foot">
+              <button id="playPause" class="btn-secondary" type="button">Ⅱ Pausar</button>
+              <button id="resetView" class="btn-secondary" type="button">Centrar vista</button>
+              <div class="speed-control"><span class="control-label">Velocidad</span><input id="speed" type="range" min="0.2" max="2.5" step="0.1" value="1" /><span id="speedValue" class="speed-value">1.0×</span></div>
+            </div>
+          </div>
+          <div class="panel readout-wrap"><div class="readout-head"><h3>Parámetros instantáneos</h3><span>Valores actuales durante el movimiento</span></div><div id="readoutGrid" class="readout-grid"></div></div>
+          <div class="panel formula-panel"><strong>Convención aplicada · DH estándar</strong><br />Cada fila genera una transformación de {i-1} a {i} con el orden de operaciones Rz(θ) → Tz(d) → Tx(a) → Rx(α).<code class="formula">Tᵢ = Rz(θᵢ) · Tz(dᵢ) · Tx(aᵢ) · Rx(αᵢ) &nbsp;&nbsp; T₀ₙ = T₁ T₂ ··· Tₙ</code>Los ejes de todos los marcos conservan el mismo código de color: X rojo, Y verde y Z azul. Las cotas Dᵢ y Lᵢ muestran las traslaciones de cada fila.</div>
         </div>
-
-        <div class="p-5 space-y-6 flex-1">
-            <!-- Selección de filas -->
-            <div>
-                <label class="block text-sm font-medium text-slate-300 mb-2">Cantidad de Movimientos (Eslabones): <span id="numRowsVal" class="text-sky-400 font-bold">3</span></label>
-                <input type="range" id="numRows" min="3" max="6" value="3" class="w-full accent-sky-500 bg-slate-800 cursor-pointer">
+        <aside class="side-panel">
+          <div class="panel side-card"><h3>Referencia de colores</h3><div class="legend-list"><div class="legend-row"><span><b class="axis-x">X</b> · eje local X</span><strong>Rojo</strong></div><div class="legend-row"><span><b class="axis-y">Y</b> · eje local Y</span><strong>Verde</strong></div><div class="legend-row"><span><b class="axis-z">Z</b> · eje local Z</span><strong>Azul</strong></div><div class="legend-row"><span>Marcos</span><strong>O₀, O₁ … Oₙ</strong></div></div></div>
+          <div class="panel side-card"><h3>Cadena configurada</h3><div id="chainSummary" class="legend-list"></div></div>
+          <div class="panel side-card point-card">
+            <h3>Transformar un punto del último marco</h3>
+            <div style="font-size:10px;color:#8da5bd;line-height:1.5;margin:-4px 0 12px">Introduce las coordenadas del punto en Oₙ. Se calcularán sus coordenadas en el marco fijo O₀ usando T₀ₙ.</div>
+            <div class="point-grid">
+              <div class="field"><label for="pointX">xₙ</label><input id="pointX" type="number" value="0.5" step="0.1" /></div>
+              <div class="field"><label for="pointY">yₙ</label><input id="pointY" type="number" value="0.5" step="0.1" /></div>
+              <div class="field"><label for="pointZ">zₙ</label><input id="pointZ" type="number" value="0.5" step="0.1" /></div>
             </div>
+            <div class="point-actions"><button id="transformPoint" class="btn-primary" type="button">Calcular en O₀ →</button></div>
+            <label class="follow-row"><input id="followPoint" type="checkbox" checked /> Actualizar el punto mientras se mueve la cadena</label>
+            <div id="pointResult" class="result-box"><div class="result-placeholder">El resultado aparecerá aquí cuando transformes el punto.</div></div>
+            <div class="status-note">Punto expresado en coordenadas homogéneas [xₙ, yₙ, zₙ, 1]ᵀ. El cálculo utiliza la pose instantánea de la cadena.</div>
+          </div>
+        </aside>
+      </div>
+    </section>
+    <p class="footer-note">DH Motion Lab · Cinemática directa interactiva · Diseñado para escritorio, tablet y celular</p>
+  </main>
 
-            <!-- Tabla de Parámetros D-H -->
-            <div class="overflow-x-auto border border-slate-800 rounded-lg bg-slate-950/50 p-2">
-                <table class="w-full text-left text-xs">
-                    <thead>
-                        <tr class="border-b border-slate-800 text-sky-300">
-                            <th class="p-1.5 text-center">#</th>
-                            <th class="p-1.5">$\theta$ (Ángulo/q)</th>
-                            <th class="p-1.5">$d$ (Offset Z)</th>
-                            <th class="p-1.5">$a$ (Long. X)</th>
-                            <th class="p-1.5">$\alpha$ (Twist)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="dhTableBody">
-                        <!-- Generado dinámicamente -->
-                    </tbody>
-                </table>
-            </div>
+  <dialog id="parameterDialog">
+    <form id="parameterForm" method="dialog">
+      <div class="modal-head"><div><h3 id="dialogTitle">Editar parámetro</h3><p id="dialogSubtitle">Fila 1 · Parámetro θ</p></div><button id="closeDialog" class="icon-btn" type="button" aria-label="Cerrar">×</button></div>
+      <div id="dialogFields" class="modal-body"></div>
+      <div class="modal-foot"><button id="cancelDialog" class="btn-secondary" type="button">Cancelar</button><button class="btn-primary" type="submit">Guardar parámetro</button></div>
+    </form>
+  </dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-            <!-- Controles Deslizantes Articulares (Sliders q) -->
-            <div class="space-y-3">
-                <h2 class="text-sm font-semibold text-sky-400">Variables Articulares y Desplazamientos</h2>
-                <div id="slidersContainer" class="space-y-3 bg-slate-950/50 p-3 rounded-lg border border-slate-800">
-                    <!-- Dinámico -->
-                </div>
-            </div>
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js';
+    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/controls/OrbitControls.js';
 
-            <!-- Transformación de Punto en Efector Final -->
-            <div class="bg-slate-950/70 p-4 rounded-lg border border-slate-800 space-y-3">
-                <h2 class="text-sm font-semibold text-emerald-400">Punto en el Último Sistema Móvil ($P_n$)</h2>
-                <div class="grid grid-cols-3 gap-2 text-xs">
-                    <div>
-                        <label class="text-slate-400">Xn</label>
-                        <input type="number" id="ptX" value="0" step="0.1" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-center text-white">
-                    </div>
-                    <div>
-                        <label class="text-slate-400">Yn</label>
-                        <input type="number" id="ptY" value="0" step="0.1" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-center text-white">
-                    </div>
-                    <div>
-                        <label class="text-slate-400">Zn</label>
-                        <input type="number" id="ptZ" value="1" step="0.1" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-center text-white">
-                    </div>
-                </div>
-                <div class="mt-2 text-xs bg-slate-900 p-2.5 rounded border border-slate-800">
-                    <span class="text-slate-400 block mb-1">Coordenada Global Calculada ($P_0$):</span>
-                    <span id="globalPointResult" class="font-mono text-emerald-300 font-bold">X: 0.00, Y: 0.00, Z: 0.00</span>
-                </div>
-            </div>
-        </div>
+    const $ = (id) => document.getElementById(id);
+    const defaults = () => ({
+      theta: { mode:'q', q0:0, amplitude:35, offset:0, customOffset:0, fixed:0 },
+      d: { mode:'l', base:0.25, amplitude:0.08 },
+      a: { mode:'l', base:1.0, amplitude:0.25 },
+      alpha: { fixed:0 }
+    });
+    let rows = Array.from({length:3}, defaults);
+    rows[1].alpha.fixed = 90;
+    let editing = null, sceneReady = false, running = true, speed = 1;
+    let renderer, scene, camera, orbit, clock, rootGroup, frameGroups = [], dimensionLabels = [], segmentObjects = [], matrixNow = new THREE.Matrix4();
+    let pointMarker, pointLine, pointHasBeenCalculated = false, lastTransform = new THREE.Matrix4();
+    let lastUiUpdate = 0, toastTimer;
 
-        <div class="p-4 border-t border-slate-800 text-xs text-slate-500 text-center">
-            Ejes: <span class="text-red-400 font-bold">X</span>, <span class="text-green-400 font-bold">Y</span>, <span class="text-blue-400 font-bold">Z</span>
-        </div>
-    </aside>
+    const names = {theta:'θ (theta)',d:'d',a:'a',alpha:'α (alpha)'};
+    const offsetOptions = [
+      {v:0,t:'Sin desplazamiento'}, {v:0.5,t:'+ π/2'}, {v:1,t:'+ π'}, {v:-0.5,t:'− π/2'}, {v:-1,t:'− π'}, {v:1.5,t:'+ 3π/2'}, {v:-1.5,t:'− 3π/2'}, {v:2,t:'+ 2π'}, {v:-2,t:'− 2π'}, {v:999,t:'Personalizado (k · π)'}
+    ];
+    const format = (n, digits=2) => Number(n).toFixed(digits).replace(/-0\.00$/,'0.00');
+    const fmtAngle = (rad) => `${format(THREE.MathUtils.radToDeg(rad),1)}°`;
+    const setToast = (message) => { const t=$('toast'); t.textContent=message;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2200); };
 
-    <!-- Contenedor del Canvas 3D -->
-    <main class="flex-1 relative" id="canvas-container"></main>
+    function cellDisplay(row, key) {
+      const p=row[key];
+      if(key==='theta'){
+        if(p.mode==='fixed') return {main:`${format(p.fixed,1)}°`,sub:'θ fija',kind:'fixed'};
+        const offset=p.offset===999?`${p.customOffset>=0?'+':''}${format(p.customOffset,2)}π`:({0:'',0.5:' + π/2',1:' + π', '-0.5':' − π/2','-1':' − π','1.5':' + 3π/2','-1.5':' − 3π/2','2':' + 2π','-2':' − 2π'}[String(p.offset)]||'');
+        return {main:`q${offset}`,sub:`q₀ ${format(p.q0,1)}° · amplitud ${format(p.amplitude,1)}°`,kind:'variable'};
+      }
+      if(key==='d'||key==='a'){
+        if(p.mode==='l') return {main:`l = ${format(p.base)}`,sub:'Distancia fija',kind:'fixed'};
+        return {main:`d(t) = ${format(p.base)} ± ${format(p.amplitude)}`,sub:'Distancia variable',kind:'variable'};
+      }
+      return {main:`${format(p.fixed,1)}°`,sub:'α fija',kind:'fixed'};
+    }
 
-    <script>
-        // --- MOTOR THREE.JS Y ESCENA ---
-        const container = document.getElementById('canvas-container');
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0b0f19);
+    function renderRows(){
+      $('parameterRows').innerHTML=rows.map((row,i)=>`<tr><td class="row-num">${i+1}</td>${['theta','d','a','alpha'].map(key=>{const s=cellDisplay(row,key);return `<td><button type="button" class="param-cell" data-row="${i}" data-key="${key}" data-kind="${s.kind}" aria-label="Editar ${names[key]}, fila ${i+1}"><span class="param-main">${s.main}</span><span class="param-sub">${s.sub}</span></button></td>`}).join('')}</tr>`).join('');
+      $('rowCount').textContent=rows.length;$('countHint').textContent=`${rows.length} de 6 filas`;
+      $('removeRow').disabled=rows.length<=3;$('addRow').disabled=rows.length>=6;
+    }
+    $('parameterRows').addEventListener('click',e=>{const b=e.target.closest('button[data-key]');if(b)openEditor(Number(b.dataset.row),b.dataset.key)});
+    $('addRow').addEventListener('click',()=>{if(rows.length<6){rows.push(defaults());renderRows();}});
+    $('removeRow').addEventListener('click',()=>{if(rows.length>3){rows.pop();renderRows();}});
 
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(5, 4, 6);
+    function openEditor(rowIndex,key){
+      editing={rowIndex,key};const p=rows[rowIndex][key];
+      $('dialogTitle').textContent=`Editar ${names[key]}`;$('dialogSubtitle').textContent=`Movimiento ${rowIndex+1} · Parámetro ${names[key]}`;
+      const host=$('dialogFields');
+      if(key==='theta'){
+        const isQ=p.mode==='q';
+        host.innerHTML=`<div class="radio-stack"><label class="radio-card"><input type="radio" name="thetaMode" value="q" ${isQ?'checked':''}><span>q(t) · Variable</span><small>Articulación rotacional que oscila.</small></label><label class="radio-card"><input type="radio" name="thetaMode" value="fixed" ${!isQ?'checked':''}><span>θ fija</span><small>Ángulo constante en este movimiento.</small></label></div>
+        <div id="thetaVariableFields" class="${isQ?'':'hidden'}"><div class="modal-grid"><div class="modal-field"><label for="q0">Ángulo base q₀ (grados)</label><input id="q0" type="number" step="1" value="${p.q0}"></div><div class="modal-field"><label for="qAmp">Amplitud (grados)</label><input id="qAmp" type="number" min="0" max="360" step="1" value="${p.amplitude}"></div></div>
+        <div class="modal-field"><label for="qOffset">Desplazamiento angular</label><select id="qOffset">${offsetOptions.map(o=>`<option value="${o.v}" ${String(o.v)===String(p.offset)?'selected':''}>${o.t}</option>`).join('')}</select></div><div class="modal-field ${p.offset===999?'':'hidden'}" id="customOffsetWrap"><label for="customOffset">Valor de k en k · π</label><input id="customOffset" type="number" step="0.25" value="${p.customOffset}"><small>Ejemplo: k = 0.5 suma π/2; k = −1 resta π.</small></div>
+        <small>La animación usa θ(t) = q₀ + A·sen(ωt + fase) + desplazamiento. Cada articulación tiene una fase ligeramente distinta para distinguir sus movimientos.</small></div>
+        <div id="thetaFixedFields" class="modal-field ${isQ?'hidden':''}"><label for="thetaFixed">Ángulo θ fijo (grados)</label><input id="thetaFixed" type="number" step="1" value="${p.fixed}"></div>`;
+        host.querySelectorAll('input[name="thetaMode"]').forEach(r=>r.addEventListener('change',()=>{const q=r.value==='q';$('thetaVariableFields').classList.toggle('hidden',!q);$('thetaFixedFields').classList.toggle('hidden',q)}));
+        $('qOffset').addEventListener('change',()=>{$('customOffsetWrap').classList.toggle('hidden',$('qOffset').value!=='999')});
+      }else if(key==='d'||key==='a'){
+        const variable=p.mode==='d';
+        host.innerHTML=`<div class="radio-stack"><label class="radio-card"><input type="radio" name="distanceMode" value="l" ${!variable?'checked':''}><span>l · Fija</span><small>Longitud constante.</small></label><label class="radio-card"><input type="radio" name="distanceMode" value="d" ${variable?'checked':''}><span>d(t) · Variable</span><small>Desplazamiento prismático.</small></label></div><div class="modal-grid"><div class="modal-field"><label for="distanceBase">${key==='a'?'Longitud':'Desplazamiento'} base</label><input id="distanceBase" type="number" min="0" step="0.05" value="${p.base}"></div><div class="modal-field ${variable?'':'hidden'}" id="distanceAmpWrap"><label for="distanceAmp">Amplitud de movimiento</label><input id="distanceAmp" type="number" min="0" step="0.05" value="${p.amplitude}"></div></div><small>Las distancias se expresan en unidades arbitrarias consistentes. Para evitar longitudes negativas, el recorrido prismático se limita a un mínimo visual positivo.</small>`;
+        host.querySelectorAll('input[name="distanceMode"]').forEach(r=>r.addEventListener('change',()=>{$('distanceAmpWrap').classList.toggle('hidden',r.value!=='d')}));
+      }else{
+        host.innerHTML=`<div class="modal-field"><label for="alphaFixed">Ángulo α fijo (grados)</label><input id="alphaFixed" type="number" step="1" value="${p.fixed}"><small>α establece la torsión entre los ejes z consecutivos. Puedes utilizar, por ejemplo, 0°, 90° o −90°.</small></div>`;
+      }
+      $('parameterDialog').showModal();
+    }
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth - 450, window.innerHeight);
-        renderer.shadowMap.enabled = true;
-        container.appendChild(renderer.domElement);
+    $('closeDialog').addEventListener('click',()=> $('parameterDialog').close());
+    $('cancelDialog').addEventListener('click',()=> $('parameterDialog').close());
+    $('parameterForm').addEventListener('submit',e=>{
+      e.preventDefault();if(!editing)return;const {rowIndex,key}=editing;let p;
+      if(key==='theta'){
+        const mode=$('parameterDialog').querySelector('input[name="thetaMode"]:checked').value;
+        if(mode==='q'){
+          const offset=Number($('qOffset').value);p={mode,q0:Number($('q0').value)||0,amplitude:Math.max(0,Number($('qAmp').value)||0),offset,customOffset:offset===999?(Number($('customOffset').value)||0):0,fixed:0};
+        }else p={mode,fixed:Number($('thetaFixed').value)||0,q0:0,amplitude:0,offset:0,customOffset:0};
+      }else if(key==='d'||key==='a'){
+        const mode=$('parameterDialog').querySelector('input[name="distanceMode"]:checked').value;p={mode,base:Math.max(0,Number($('distanceBase').value)||0),amplitude:mode==='d'?Math.max(0,Number($('distanceAmp').value)||0):0};
+      }else p={fixed:Number($('alphaFixed').value)||0};
+      rows[rowIndex][key]=p;$('parameterDialog').close();renderRows();
+    });
 
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
+    function makeTextSprite(text, options={}){
+      const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');canvas.width=512;canvas.height=128;
+      ctx.clearRect(0,0,512,128);ctx.fillStyle=options.bg||'rgba(5,15,27,.82)';roundRect(ctx,14,17,484,94,24);ctx.fill();ctx.strokeStyle=options.border||'rgba(105,160,190,.65)';ctx.lineWidth=3;roundRect(ctx,14,17,484,94,24);ctx.stroke();ctx.font=`700 ${options.fontSize||36}px ui-sans-serif,system-ui`;ctx.fillStyle=options.color||'#eaf6ff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(text,256,65,450);
+      const tex=new THREE.CanvasTexture(canvas);tex.colorSpace=THREE.SRGBColorSpace;const mat=new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false});const sprite=new THREE.Sprite(mat);sprite.scale.set(options.scaleX||0.82,options.scaleY||0.205,1);sprite.userData.setText=(next)=>{if(sprite.userData.text===next)return;sprite.userData.text=next;ctx.clearRect(0,0,512,128);ctx.fillStyle=options.bg||'rgba(5,15,27,.82)';roundRect(ctx,14,17,484,94,24);ctx.fill();ctx.strokeStyle=options.border||'rgba(105,160,190,.65)';ctx.lineWidth=3;roundRect(ctx,14,17,484,94,24);ctx.stroke();ctx.font=`700 ${options.fontSize||36}px ui-sans-serif,system-ui`;ctx.fillStyle=options.color||'#eaf6ff';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText(next,256,65,450);tex.needsUpdate=true;};sprite.userData.text=text;return sprite;
+    }
+    function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath()}
+    function addAxes(group,length){
+      const dirs=[new THREE.Vector3(1,0,0),new THREE.Vector3(0,1,0),new THREE.Vector3(0,0,1)],colors=[0xff5968,0x35d49a,0x5795ff],letters=['X','Y','Z'];
+      dirs.forEach((dir,i)=>{const arrow=new THREE.ArrowHelper(dir,new THREE.Vector3(0,0,0),length,colors[i],length*.18,length*.09);arrow.line.material.depthTest=false;arrow.cone.material.depthTest=false;group.add(arrow);const lab=makeTextSprite(letters[i],{color:['#ff8992','#73edb8','#85b4ff'][i],border:'rgba(90,120,150,.38)',scaleX:.21,scaleY:.07,fontSize:40});lab.position.copy(dir.clone().multiplyScalar(length*1.12));group.add(lab)});
+    }
+    function makeLine(color,dashed=false){const geometry=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(),new THREE.Vector3()]);const material=dashed?new THREE.LineDashedMaterial({color,dashSize:.08,gapSize:.045,transparent:true,opacity:.8,depthTest:false}):new THREE.LineBasicMaterial({color,transparent:true,opacity:.95});const line=new THREE.Line(geometry,material);line.frustumCulled=false;return line}
+    function updateLine(line,a,b){line.geometry.setFromPoints([a,b]);if(line.material.isLineDashedMaterial)line.computeLineDistances()}
+    function makeRod(color){const mesh=new THREE.Mesh(new THREE.CylinderGeometry(.025,.025,1,10),new THREE.MeshStandardMaterial({color,metalness:.25,roughness:.45}));mesh.userData.update=(a,b)=>{const dir=new THREE.Vector3().subVectors(b,a),len=dir.length();mesh.position.copy(a).add(b).multiplyScalar(.5);mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir.normalize());mesh.scale.set(1,Math.max(len,.001),1);mesh.visible=len>.015};return mesh}
 
-        // Iluminación
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-        scene.add(ambientLight);
-        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        dirLight.position.set(10, 20, 10);
-        scene.add(dirLight);
+    function standardDH(theta,d,a,alpha){const c=Math.cos(theta),s=Math.sin(theta),ca=Math.cos(alpha),sa=Math.sin(alpha);return new THREE.Matrix4().set(c,-s*ca,s*sa,a*c,s,c*ca,-c*sa,a*s,0,sa,ca,d,0,0,0,1)}
+    function rzTz(theta,d){const c=Math.cos(theta),s=Math.sin(theta);return new THREE.Matrix4().set(c,-s,0,0,s,c,0,0,0,0,1,d,0,0,0,1)}
+    function tx(a){return new THREE.Matrix4().makeTranslation(a,0,0)}
+    function valuesAt(row,i,t){
+      const th=row.theta.mode==='q'?(THREE.MathUtils.degToRad(row.theta.q0)+THREE.MathUtils.degToRad(row.theta.amplitude)*Math.sin(t+i*.73)+THREE.MathUtils.degToRad((row.theta.offset===999?row.theta.customOffset:row.theta.offset)*180)):THREE.MathUtils.degToRad(row.theta.fixed);
+      const d=row.d.mode==='d'?Math.max(.025,row.d.base+row.d.amplitude*Math.sin(t+i*.51+1.1)):row.d.base;
+      const a=row.a.mode==='d'?Math.max(.025,row.a.base+row.a.amplitude*Math.sin(t+i*.51+1.1)):row.a.base;
+      return {theta:th,d,a,alpha:THREE.MathUtils.degToRad(row.alpha.fixed)};
+    }
 
-        // Plano de Referencia y Grid
-        const gridHelper = new THREE.GridHelper(10, 10, 0x38bdf8, 0x1e293b);
-        gridHelper.position.y = -0.01;
-        scene.add(gridHelper);
+    function initScene(){
+      const canvas=$('viewport');renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.18;
+      scene=new THREE.Scene();scene.background=new THREE.Color(0x0a1727);scene.fog=new THREE.Fog(0x0a1727,12,35);
+      camera=new THREE.PerspectiveCamera(43,1,.1,100);camera.up.set(0,0,1);camera.position.set(4.8,-7.2,5.1);
+      orbit=new OrbitControls(camera,renderer.domElement);orbit.enableDamping=true;orbit.dampingFactor=.065;orbit.target.set(.9,0,.55);orbit.minDistance=1.4;orbit.maxDistance=24;orbit.update();
+      scene.add(new THREE.HemisphereLight(0x9fcaff,0x233044,2.0));const key=new THREE.DirectionalLight(0xffffff,2.2);key.position.set(5,-4,8);scene.add(key);const fill=new THREE.PointLight(0x42bcd8,20,18);fill.position.set(-3,3,4);scene.add(fill);
+      const grid=new THREE.GridHelper(20,40,0x294965,0x1a314a);grid.rotation.x=Math.PI/2;grid.position.z=-.015;grid.material.transparent=true;grid.material.opacity=.58;scene.add(grid);
+      rootGroup=new THREE.Group();scene.add(rootGroup);frameGroups=[];dimensionLabels=[];segmentObjects=[];
+      const scale=Math.max(.28,Math.min(.55,1.8/(rows.reduce((sum,r)=>sum+r.a.base,0)/rows.length+1)));
+      const frame0=new THREE.Group();addAxes(frame0,scale);const originSphere=new THREE.Mesh(new THREE.SphereGeometry(.065,16,12),new THREE.MeshStandardMaterial({color:0xf2f8ff,emissive:0x375578,emissiveIntensity:.65}));frame0.add(originSphere);const name0=makeTextSprite('O₀ · FIJO',{scaleX:.52,scaleY:.13,fontSize:38});name0.position.set(0,0,-.22);frame0.add(name0);rootGroup.add(frame0);frameGroups.push(frame0);
+      const originPoints=[];
+      for(let i=0;i<rows.length;i++){
+        const frame=new THREE.Group();addAxes(frame,scale);const dot=new THREE.Mesh(new THREE.SphereGeometry(.052,14,10),new THREE.MeshStandardMaterial({color:0xe8f4ff,emissive:0x294d6c,emissiveIntensity:.9}));frame.add(dot);const name=makeTextSprite(`O${i+1}`,{scaleX:.28,scaleY:.09,fontSize:42});name.position.set(0,0,-.20);frame.add(name);rootGroup.add(frame);frameGroups.push(frame);
+        const dRod=makeRod(0x63b6cf),aRod=makeRod(0xe8b96a);rootGroup.add(dRod,aRod);
+        const dLine=makeLine(0x70d8e7,true),aLine=makeLine(0xffd18a,true);rootGroup.add(dLine,aLine);
+        const dLabel=makeTextSprite('D',{color:'#8de5ef',border:'rgba(80,180,200,.5)',scaleX:.52,scaleY:.13,fontSize:34}),aLabel=makeTextSprite('L',{color:'#ffdda0',border:'rgba(210,160,80,.5)',scaleX:.52,scaleY:.13,fontSize:34});rootGroup.add(dLabel,aLabel);
+        const joint=new THREE.Mesh(new THREE.SphereGeometry(.075,16,12),new THREE.MeshStandardMaterial({color:0xf5cf88,metalness:.35,roughness:.35,emissive:0x443018,emissiveIntensity:.4}));rootGroup.add(joint);
+        segmentObjects.push({dRod,aRod,dLine,aLine,dLabel,aLabel,joint});
+      }
+      const pointMat=new THREE.MeshStandardMaterial({color:0xff61c2,emissive:0x9d1d6d,emissiveIntensity:.55});pointMarker=new THREE.Mesh(new THREE.SphereGeometry(.09,18,12),pointMat);pointMarker.visible=false;scene.add(pointMarker);pointLine=makeLine(0xff61c2,true);pointLine.visible=false;scene.add(pointLine);
+      clock=new THREE.Clock();resizeRenderer();window.addEventListener('resize',resizeRenderer);if('ResizeObserver' in window){new ResizeObserver(resizeRenderer).observe($('viewport').parentElement)}
+      animate();
+    }
+    function resizeRenderer(){if(!renderer||!camera)return;const box=$('viewport').getBoundingClientRect();if(!box.width||!box.height)return;renderer.setSize(box.width,box.height,false);camera.aspect=box.width/box.height;camera.updateProjectionMatrix()}
 
-        const axesGlobal = new THREE.AxesHelper(1.5);
-        axesGlobal.material.linewidth = 3;
-        scene.add(axesGlobal);
+    let latestPositions=[];
+    function evaluatePose(t){
+      if(!scene)return;let cumulative=new THREE.Matrix4().identity();const origin0=new THREE.Vector3(0,0,0);latestPositions=[origin0];frameGroups[0].position.set(0,0,0);frameGroups[0].quaternion.identity();
+      const instant=[];
+      rows.forEach((row,i)=>{
+        const v=valuesAt(row,i,t),prev=cumulative.clone(),mid=prev.clone().multiply(rzTz(v.theta,v.d)),next=mid.clone().multiply(tx(v.a)).multiply(new THREE.Matrix4().makeRotationX(v.alpha));
+        const A=new THREE.Vector3().setFromMatrixPosition(prev),B=new THREE.Vector3().setFromMatrixPosition(mid),C=new THREE.Vector3().setFromMatrixPosition(next);const position=new THREE.Vector3(), q=new THREE.Quaternion();next.decompose(position,q,new THREE.Vector3());frameGroups[i+1].position.copy(position);frameGroups[i+1].quaternion.copy(q);
+        const obj=segmentObjects[i];obj.dRod.userData.update(A,B);obj.aRod.userData.update(B,C);obj.dLine.visible=v.d>.015;obj.aLine.visible=v.a>.015;updateLine(obj.dLine,A,B);updateLine(obj.aLine,B,C);obj.joint.position.copy(B);
+        const offsetD=new THREE.Vector3(.035,.035,.07),offsetA=new THREE.Vector3(.035,.035,.07);obj.dLabel.position.copy(A).add(B).multiplyScalar(.5).add(offsetD);obj.aLabel.position.copy(B).add(C).multiplyScalar(.5).add(offsetA);
+        obj.dLabel.userData.setText(`${row.d.mode==='d'?'d':'l'}${i+1} = ${format(v.d)}`);obj.aLabel.userData.setText(`${row.a.mode==='d'?'d':'l'}${i+1} = ${format(v.a)}`);
+        cumulative=next;latestPositions.push(position.clone());instant.push(v);
+      });
+      lastTransform.copy(cumulative);
+      if(pointHasBeenCalculated && $('followPoint').checked)updatePointFromInputs(false);
+      const now=performance.now();if(now-lastUiUpdate>100){updateReadouts(instant);lastUiUpdate=now;}
+    }
+    function updateReadouts(instant){
+      $('readoutGrid').innerHTML=instant.map((v,i)=>`<div class="readout-item"><div class="r-title">MOVIMIENTO ${i+1} · O${i} → O${i+1}</div><div class="r-values">θ = ${fmtAngle(v.theta)}<br>d = ${format(v.d)}<br>a = ${format(v.a)}<br>α = ${fmtAngle(v.alpha)}</div></div>`).join('');
+    }
+    function animate(){if(!sceneReady)return;requestAnimationFrame(animate);const elapsed=clock.getElapsedTime()*speed;if(running)evaluatePose(elapsed);orbit.update();renderer.render(scene,camera)}
 
-        // Grupos visuales para la estructura robótica y rastros
-        let robotGroup = new THREE.Group();
-        scene.add(robotGroup);
+    function showScene(){
+      $('setup').classList.add('hidden');$('sceneSection').classList.remove('hidden');$('sceneSection').scrollIntoView({behavior:'smooth',block:'start'});$('chainSummary').innerHTML=rows.map((r,i)=>`<div class="legend-row"><span>O${i} → O${i+1}</span><strong>${r.theta.mode==='q'?'Rotacional q':'Rotacional fija'} · ${r.d.mode==='d'||r.a.mode==='d'?'Prismática':'Longitud fija'}</strong></div>`).join('');
+      $('readoutGrid').innerHTML='';$('pointResult').innerHTML='<div class="result-placeholder">El resultado aparecerá aquí cuando transformes el punto.</div>';pointHasBeenCalculated=false;
+      sceneReady=true;initScene();evaluatePose(0);$('playPause').textContent='Ⅱ Pausar';running=true;
+    }
+    $('finalize').addEventListener('click',()=>{if(rows.length<3||rows.length>6){setToast('Selecciona entre 3 y 6 movimientos.');return}showScene()});
+    $('editConfig').addEventListener('click',()=>{sceneReady=false;if(renderer){renderer.dispose();renderer=null;scene=null;camera=null;orbit=null}window.removeEventListener('resize',resizeRenderer);$('sceneSection').classList.add('hidden');$('setup').classList.remove('hidden');$('setup').scrollIntoView({behavior:'smooth'});});
+    $('playPause').addEventListener('click',()=>{running=!running;$('playPause').textContent=running?'Ⅱ Pausar':'▶ Reanudar';if(!running){evaluatePose(clock.getElapsedTime()*speed)}});
+    $('speed').addEventListener('input',e=>{speed=Number(e.target.value);$('speedValue').textContent=`${speed.toFixed(1)}×`});
+    $('resetView').addEventListener('click',()=>{if(!camera)return;camera.position.set(4.8,-7.2,5.1);orbit.target.set(.9,0,.55);orbit.update()});
 
-        let trailGroup = new THREE.Group();
-        scene.add(trailGroup);
+    function updatePointFromInputs(showMessage=true){
+      const x=Number($('pointX').value),y=Number($('pointY').value),z=Number($('pointZ').value);if(![x,y,z].every(Number.isFinite)){if(showMessage)setToast('Introduce valores válidos para x, y y z.');return}
+      const local=new THREE.Vector3(x,y,z),world=local.clone().applyMatrix4(lastTransform);pointMarker.position.copy(world);pointMarker.visible=true;updateLine(pointLine,new THREE.Vector3(0,0,0),world);pointLine.visible=true;pointHasBeenCalculated=true;
+      $('pointResult').innerHTML=`<div class="result-title">COORDENADAS EN EL SISTEMA FIJO O₀</div><div class="result-vector">x₀ = ${format(world.x,4)}<br>y₀ = ${format(world.y,4)}<br>z₀ = ${format(world.z,4)}</div><div style="margin-top:7px;font-size:9px;color:#7e9ab4">Punto transformado: P₀ = T₀ₙ · Pₙ</div>`;
+      if(showMessage)setToast('Punto transformado correctamente a O₀.');
+    }
+    $('transformPoint').addEventListener('click',()=>updatePointFromInputs(true));
+    ['pointX','pointY','pointZ'].forEach(id=>$(id).addEventListener('change',()=>{if(pointHasBeenCalculated&&$('followPoint').checked)updatePointFromInputs(false)}));
+    $('followPoint').addEventListener('change',()=>{if(pointHasBeenCalculated&&$('followPoint').checked)updatePointFromInputs(false)});
 
-        const historyPoints = [];
-
-        // --- GESTIÓN DE INTERFAZ Y TABLA D-H ---
-        const numRowsInput = document.getElementById('numRows');
-        const numRowsVal = document.getElementById('numRowsVal');
-        const dhTableBody = document.getElementById('dhTableBody');
-        const slidersContainer = document.getElementById('slidersContainer');
-
-        function initUI() {
-            const n = parseInt(numRowsInput.value);
-            numRowsVal.textContent = n;
-            dhTableBody.innerHTML = '';
-            slidersContainer.innerHTML = '';
-
-            for (let i = 1; i <= n; i++) {
-                // Fila de tabla D-H
-                let tr = document.createElement('tr');
-                tr.className = 'border-b border-slate-900';
-                tr.innerHTML = `
-                    <td class="p-1.5 text-center font-bold text-sky-400">${i}</td>
-                    <td class="p-1.5">
-                        <select id="theta_type_${i}" class="bg-slate-900 text-white rounded p-1 w-full border border-slate-700 text-xs">
-                            <option value="q">q${i} (Variable)</option>
-                            <option value="q_pi">q${i} + π</option>
-                            <option value="q_npi">q${i} - π</option>
-                            <option value="0">0</option>
-                            <option value="pi_2">π/2</option>
-                        </select>
-                    </td>
-                    <td class="p-1.5">
-                        <div class="flex gap-1">
-                            <select id="d_mode_${i}" class="bg-slate-900 text-white rounded p-1 border border-slate-700 text-xs w-12">
-                                <option value="l">l</option>
-                                <option value="d">d</option>
-                            </select>
-                            <input type="number" id="d_val_${i}" value="${i === 1 ? 1 : 0.5}" step="0.1" class="bg-slate-900 text-white rounded p-1 w-full border border-slate-700 text-xs">
-                        </div>
-                    </td>
-                    <td class="p-1.5">
-                        <div class="flex gap-1">
-                            <select id="a_mode_${i}" class="bg-slate-900 text-white rounded p-1 border border-slate-700 text-xs w-12">
-                                <option value="l">l</option>
-                                <option value="d">d</option>
-                            </select>
-                            <input type="number" id="a_val_${i}" value="${i === 1 ? 0 : 1}" step="0.1" class="bg-slate-900 text-white rounded p-1 w-full border border-slate-700 text-xs">
-                        </div>
-                    </td>
-                    <td class="p-1.5">
-                        <input type="number" id="alpha_val_${i}" value="0" step="90" class="bg-slate-900 text-white rounded p-1 w-full border border-slate-700 text-xs text-center" placeholder="Grados">
-                    </td>
-                `;
-                dhTableBody.appendChild(tr);
-
-                // Slider articular q_i
-                let sliderDiv = document.createElement('div');
-                sliderDiv.className = 'flex items-center justify-between text-xs';
-                sliderDiv.innerHTML = `
-                    <span class="text-slate-300 font-mono">q${i} (°):</span>
-                    <input type="range" id="slider_q_${i}" min="-180" max="180" value="0" class="w-48 accent-sky-500 bg-slate-900 cursor-pointer">
-                    <span id="val_q_${i}" class="w-12 text-right font-mono text-sky-400">0°</span>
-                `;
-                slidersContainer.appendChild(sliderDiv);
-
-                // Event listeners
-                document.getElementById(`slider_q_${i}`).addEventListener('input', (e) => {
-                    document.getElementById(`val_q_${i}`).textContent = e.target.value + '°';
-                    updateRobot();
-                });
-            }
-
-            // Listeners generales
-            document.querySelectorAll('select, input').forEach(el => {
-                if(el.id !== 'numRows') el.addEventListener('input', updateRobot);
-            });
-
-            updateRobot();
-        }
-
-        numRowsInput.addEventListener('input', initUI);
-
-        // --- MATRICES DE TRANSFORMACIÓN HOMOGÉNEA D-H ---
-        // Convención Estándar: T = RotZ(theta) * TransZ(d) * TransX(a) * RotX(alpha)
-        function dhMatrix(theta, d, a, alpha) {
-            const ct = Math.cos(theta), st = Math.sin(theta);
-            const ca = Math.cos(alpha), sa = Math.sin(alpha);
-
-            return new THREE.Matrix4().set(
-                ct, -st * ca,  st * sa, a * ct,
-                st,  ct * ca, -ct * sa, a * st,
-                 0,       sa,       ca,      d,
-                 0,        0,        0,      1
-            );
-        }
-
-        function createCustomAxes(size = 0.8) {
-            const group = new THREE.Group();
-            
-            // Eje X (Rojo)
-            const matX = new THREE.MeshBasicMaterial({color: 0xef4444});
-            const geoX = new THREE.CylinderGeometry(0.02, 0.02, size, 8);
-            const meshX = new THREE.Mesh(geoX, matX);
-            meshX.rotation.z = -Math.PI / 2;
-            meshX.position.x = size / 2;
-            group.add(meshX);
-
-            // Eje Y (Verde)
-            const matY = new THREE.MeshBasicMaterial({color: 0x22c55e});
-            const geoY = new THREE.CylinderGeometry(0.02, 0.02, size, 8);
-            const meshY = new THREE.Mesh(geoY, matY);
-            meshY.position.y = size / 2;
-            group.add(meshY);
-
-            // Eje Z (Azul)
-            const matZ = new THREE.MeshBasicMaterial({color: 0x3b82f6});
-            const geoZ = new THREE.CylinderGeometry(0.02, 0.02, size, 8);
-            const meshZ = new THREE.Mesh(geoZ, matZ);
-            meshZ.rotation.x = Math.PI / 2;
-            meshZ.position.z = size / 2;
-            group.add(meshZ);
-
-            return group;
-        }
-
-        // --- ACTUALIZACIÓN DE CINEMÁTICA Y RENDERIZADO 3D ---
-        function updateRobot() {
-            // Limpiar escena anterior
-            while(robotGroup.children.length > 0){ 
-                robotGroup.remove(robotGroup.children[0]); 
-            }
-
-            const n = parseInt(numRowsInput.value);
-            let currentTransform = new THREE.Matrix4(); // Identidad (Base O0)
-
-            let previousOrigin = new THREE.Vector3(0, 0, 0);
-            const frameOrigins = [previousOrigin.clone()];
-
-            for (let i = 1; i <= n; i++) {
-                // Obtener valores de la interfaz
-                const thetaType = document.getElementById(`theta_type_${i}`).value;
-                const qDeg = parseFloat(document.getElementById(`slider_q_${i}`).value);
-                let qRad = qDeg * Math.PI / 180;
-
-                if (thetaType === 'q_pi') qRad += Math.PI;
-                if (thetaType === 'q_npi') qRad -= Math.PI;
-                if (thetaType === '0') qRad = 0;
-                if (thetaType === 'pi_2') qRad = Math.PI / 2;
-
-                const dVal = parseFloat(document.getElementById(`d_val_${i}`).value) || 0;
-                const aVal = parseFloat(document.getElementById(`a_val_${i}`).value) || 0;
-                const alphaDeg = parseFloat(document.getElementById(`alpha_val_${i}`).value) || 0;
-                const alphaRad = alphaDeg * Math.PI / 180;
-
-                // Calcular matriz T_i
-                const Ti = dhMatrix(qRad, dVal, aVal, alphaRad);
-                
-                // Acumular transformación global H_i = H_{i-1} * T_i
-                currentTransform.multiply(Ti);
-
-                // Extraer posición del nuevo sistema móvil
-                const origin = new THREE.Vector3();
-                const quaternion = new THREE.Quaternion();
-                const scale = new THREE.Vector3();
-                currentTransform.decompose(origin, quaternion, scale);
-
-                frameOrigins.push(origin.clone());
-
-                // Dibujar eslabón (Cilindro de conexión entre origen anterior y actual)
-                const linkGeo = new THREE.CylinderGeometry(0.03, 0.03, previousOrigin.distanceTo(origin), 8);
-                const linkMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, roughness: 0.3 });
-                const linkMesh = new THREE.Mesh(linkGeo, linkMat);
-
-                // Posicionar y orientar el cilindro del eslabón
-                linkMesh.position.copy(previousOrigin).add(origin).multiplyScalar(0.5);
-                linkMesh.quaternion.setFromUnitVectors(
-                    new THREE.Vector3(0, 1, 0),
-                    new THREE.Vector3().subVectors(origin, previousOrigin).normalize()
-                );
-                robotGroup.add(linkMesh);
-
-                // Dibujar Sistema Móvil O_i con los 3 ejes RGB primarios
-                const mobileAxes = createCustomAxes(0.6);
-                mobileAxes.applyMatrix4(currentTransform);
-                robotGroup.add(mobileAxes);
-
-                previousOrigin.copy(origin);
-            }
-
-            // Actualizar rastro del efector final
-            historyPoints.push(previousOrigin.clone());
-            if (historyPoints.length > 150) historyPoints.shift();
-
-            while(trailGroup.children.length > 0) trailGroup.remove(trailGroup.children[0]);
-            if (historyPoints.length > 1) {
-                const trailGeo = new THREE.BufferGeometry().setFromPoints(historyPoints);
-                const trailMat = new THREE.LineBasicMaterial({ color: 0xf59e0b, linewidth: 2 });
-                const trailLine = new THREE.Line(trailGeo, trailMat);
-                trailGroup.add(trailLine);
-            }
-
-            // --- CÁLCULO DE PUNTO EN EFECTOR FINAL HACIA SISTEMA FIJO (T_0) ---
-            const ptX = parseFloat(document.getElementById('ptX').value) || 0;
-            const ptY = parseFloat(document.getElementById('ptY').value) || 0;
-            const ptZ = parseFloat(document.getElementById('ptZ').value) || 0;
-
-            const localPoint = new THREE.Vector4(ptX, ptY, ptZ, 1);
-            const globalPoint = localPoint.applyMatrix4(currentTransform);
-
-            document.getElementById('globalPointResult').textContent = 
-                `X: ${globalPoint.x.toFixed(2)}, Y: ${globalPoint.y.toFixed(2)}, Z: ${globalPoint.z.toFixed(2)}`;
-        }
-
-        // --- ANIMACIÓN Y RESPONSIVE ---
-        function animate() {
-            requestAnimationFrame(animate);
-            controls.update();
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = (window.innerWidth - 450) / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth - 450, window.innerHeight);
-        });
-
-        // Inicializar al cargar
-        initUI();
-    </script>
+    renderRows();
+  </script>
 </body>
 </html>
