@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analizador Cinemático D-H Multiplataforma</title>
+    <!-- Tailwind CSS para diseño moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js y OrbitControls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <style>
+        body { margin: 0; overflow: hidden; background-color: #0f172a; color: #f8fafc; font-family: system-ui, -apple-system, sans-serif; }
+        canvas { display: block; width: 100vw; height: 100vh; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden">
+
+    <!-- Panel Lateral de Control -->
+    <aside class="w-[450px] bg-slate-900/95 backdrop-blur border-r border-slate-800 flex flex-col z-10 shadow-2xl overflow-y-auto">
+        <div class="p-5 border-b border-slate-800">
+            <h1 class="text-xl font-bold text-sky-400">Cinemática Denavit-Hartenberg</h1>
+            <p class="text-xs text-slate-400 mt-1">Simulador 3D Interactivo para GitHub Pages</p>
+        </div>
+
+        <div class="p-5 space-y-6 flex-1">
+            <!-- Selección de filas -->
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-2">Cantidad de Movimientos (Eslabones): <span id="numRowsVal" class="text-sky-400 font-bold">3</span></label>
+                <input type="range" id="numRows" min="3" max="6" value="3" class="w-full accent-sky-500 bg-slate-800 cursor-pointer">
+            </div>
+
+            <!-- Tabla de Parámetros D-H -->
+            <div class="overflow-x-auto border border-slate-800 rounded-lg bg-slate-950/50 p-2">
+                <table class="w-full text-left text-xs">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-sky-300">
+                            <th class="p-1.5 text-center">#</th>
+                            <th class="p-1.5">$\theta$ (Ángulo/q)</th>
+                            <th class="p-1.5">$d$ (Offset Z)</th>
+                            <th class="p-1.5">$a$ (Long. X)</th>
+                            <th class="p-1.5">$\alpha$ (Twist)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dhTableBody">
+                        <!-- Generado dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Controles Deslizantes Articulares (Sliders q) -->
+            <div class="space-y-3">
+                <h2 class="text-sm font-semibold text-sky-400">Variables Articulares y Desplazamientos</h2>
+                <div id="slidersContainer" class="space-y-3 bg-slate-950/50 p-3 rounded-lg border border-slate-800">
+                    <!-- Dinámico -->
+                </div>
+            </div>
+
+            <!-- Transformación de Punto en Efector Final -->
+            <div class="bg-slate-950/70 p-4 rounded-lg border border-slate-800 space-y-3">
+                <h2 class="text-sm font-semibold text-emerald-400">Punto en el Último Sistema Móvil ($P_n$)</h2>
+                <div class="grid grid-cols-3 gap-2 text-xs">
+                    <div>
+                        <label class="text-slate-400">Xn</label>
+                        <input type="number" id="ptX" value="0" step="0.1" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-center text-white">
+                    </div>
+                    <div>
+                        <label class="text-slate-400">Yn</label>
+                        <input type="number" id="ptY" value="0" step="0.1" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-center text-white">
+                    </div>
+                    <div>
+                        <label class="text-slate-400">Zn</label>
+                        <input type="number" id="ptZ" value="1" step="0.1" class="w-full bg-slate-900 border border-slate-700 rounded p-1.5 text-center text-white">
+                    </div>
+                </div>
+                <div class="mt-2 text-xs bg-slate-900 p-2.5 rounded border border-slate-800">
+                    <span class="text-slate-400 block mb-1">Coordenada Global Calculada ($P_0$):</span>
+                    <span id="globalPointResult" class="font-mono text-emerald-300 font-bold">X: 0.00, Y: 0.00, Z: 0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-4 border-t border-slate-800 text-xs text-slate-500 text-center">
+            Ejes: <span class="text-red-400 font-bold">X</span>, <span class="text-green-400 font-bold">Y</span>, <span class="text-blue-400 font-bold">Z</span>
+        </div>
+    </aside>
+
+    <!-- Contenedor del Canvas 3D -->
+    <main class="flex-1 relative" id="canvas-container"></main>
+
+    <script>
+        // --- MOTOR THREE.JS Y ESCENA ---
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x0b0f19);
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(5, 4, 6);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth - 450, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        container.appendChild(renderer.domElement);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+
+        // Iluminación
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        scene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        dirLight.position.set(10, 20, 10);
+        scene.add(dirLight);
+
+        // Plano de Referencia y Grid
+        const gridHelper = new THREE.GridHelper(10, 10, 0x38bdf8, 0x1e293b);
+        gridHelper.position.y = -0.01;
+        scene.add(gridHelper);
+
+        const axesGlobal = new THREE.AxesHelper(1.5);
+        axesGlobal.material.linewidth = 3;
+        scene.add(axesGlobal);
+
+        // Grupos visuales para la estructura robótica y rastros
+        let robotGroup = new THREE.Group();
+        scene.add(robotGroup);
+
+        let trailGroup = new THREE.Group();
+        scene.add(trailGroup);
+
+        const historyPoints = [];
+
+        // --- GESTIÓN DE INTERFAZ Y TABLA D-H ---
+        const numRowsInput = document.getElementById('numRows');
+        const numRowsVal = document.getElementById('numRowsVal');
+        const dhTableBody = document.getElementById('dhTableBody');
+        const slidersContainer = document.getElementById('slidersContainer');
+
+        function initUI() {
+            const n = parseInt(numRowsInput.value);
+            numRowsVal.textContent = n;
+            dhTableBody.innerHTML = '';
+            slidersContainer.innerHTML = '';
+
+            for (let i = 1; i <= n; i++) {
+                // Fila de tabla D-H
+                let tr = document.createElement('tr');
+                tr.className = 'border-b border-slate-900';
+                tr.innerHTML = `
+                    <td class="p-1.5 text-center font-bold text-sky-400">${i}</td>
+                    <td class="p-1.5">
+                        <select id="theta_type_${i}" class="bg-slate-900 text-white rounded p-1 w-full border border-slate-700 text-xs">
+                            <option value="q">q${i} (Variable)</option>
+                            <option value="q_pi">q${i} + π</option>
+                            <option value="q_npi">q${i} - π</option>
+                            <option value="0">0</option>
+                            <option value="pi_2">π/2</option>
+                        </select>
+                    </td>
+                    <td class="p-1.5">
+                        <div class="flex gap-1">
+                            <select id="d_mode_${i}" class="bg-slate-900 text-white rounded p-1 border border-slate-700 text-xs w-12">
+                                <option value="l">l</option>
+                                <option value="d">d</option>
+                            </select>
+                            <input type="number" id="d_val_${i}" value="${i === 1 ? 1 : 0.5}" step="0.1" class="bg-slate-900 text-white rounded p-1 w-full border border-slate-700 text-xs">
+                        </div>
+                    </td>
+                    <td class="p-1.5">
+                        <div class="flex gap-1">
+                            <select id="a_mode_${i}" class="bg-slate-900 text-white rounded p-1 border border-slate-700 text-xs w-12">
+                                <option value="l">l</option>
+                                <option value="d">d</option>
+                            </select>
+                            <input type="number" id="a_val_${i}" value="${i === 1 ? 0 : 1}" step="0.1" class="bg-slate-900 text-white rounded p-1 w-full border border-slate-700 text-xs">
+                        </div>
+                    </td>
+                    <td class="p-1.5">
+                        <input type="number" id="alpha_val_${i}" value="0" step="90" class="bg-slate-900 text-white rounded p-1 w-full border border-slate-700 text-xs text-center" placeholder="Grados">
+                    </td>
+                `;
+                dhTableBody.appendChild(tr);
+
+                // Slider articular q_i
+                let sliderDiv = document.createElement('div');
+                sliderDiv.className = 'flex items-center justify-between text-xs';
+                sliderDiv.innerHTML = `
+                    <span class="text-slate-300 font-mono">q${i} (°):</span>
+                    <input type="range" id="slider_q_${i}" min="-180" max="180" value="0" class="w-48 accent-sky-500 bg-slate-900 cursor-pointer">
+                    <span id="val_q_${i}" class="w-12 text-right font-mono text-sky-400">0°</span>
+                `;
+                slidersContainer.appendChild(sliderDiv);
+
+                // Event listeners
+                document.getElementById(`slider_q_${i}`).addEventListener('input', (e) => {
+                    document.getElementById(`val_q_${i}`).textContent = e.target.value + '°';
+                    updateRobot();
+                });
+            }
+
+            // Listeners generales
+            document.querySelectorAll('select, input').forEach(el => {
+                if(el.id !== 'numRows') el.addEventListener('input', updateRobot);
+            });
+
+            updateRobot();
+        }
+
+        numRowsInput.addEventListener('input', initUI);
+
+        // --- MATRICES DE TRANSFORMACIÓN HOMOGÉNEA D-H ---
+        // Convención Estándar: T = RotZ(theta) * TransZ(d) * TransX(a) * RotX(alpha)
+        function dhMatrix(theta, d, a, alpha) {
+            const ct = Math.cos(theta), st = Math.sin(theta);
+            const ca = Math.cos(alpha), sa = Math.sin(alpha);
+
+            return new THREE.Matrix4().set(
+                ct, -st * ca,  st * sa, a * ct,
+                st,  ct * ca, -ct * sa, a * st,
+                 0,       sa,       ca,      d,
+                 0,        0,        0,      1
+            );
+        }
+
+        function createCustomAxes(size = 0.8) {
+            const group = new THREE.Group();
+            
+            // Eje X (Rojo)
+            const matX = new THREE.MeshBasicMaterial({color: 0xef4444});
+            const geoX = new THREE.CylinderGeometry(0.02, 0.02, size, 8);
+            const meshX = new THREE.Mesh(geoX, matX);
+            meshX.rotation.z = -Math.PI / 2;
+            meshX.position.x = size / 2;
+            group.add(meshX);
+
+            // Eje Y (Verde)
+            const matY = new THREE.MeshBasicMaterial({color: 0x22c55e});
+            const geoY = new THREE.CylinderGeometry(0.02, 0.02, size, 8);
+            const meshY = new THREE.Mesh(geoY, matY);
+            meshY.position.y = size / 2;
+            group.add(meshY);
+
+            // Eje Z (Azul)
+            const matZ = new THREE.MeshBasicMaterial({color: 0x3b82f6});
+            const geoZ = new THREE.CylinderGeometry(0.02, 0.02, size, 8);
+            const meshZ = new THREE.Mesh(geoZ, matZ);
+            meshZ.rotation.x = Math.PI / 2;
+            meshZ.position.z = size / 2;
+            group.add(meshZ);
+
+            return group;
+        }
+
+        // --- ACTUALIZACIÓN DE CINEMÁTICA Y RENDERIZADO 3D ---
+        function updateRobot() {
+            // Limpiar escena anterior
+            while(robotGroup.children.length > 0){ 
+                robotGroup.remove(robotGroup.children[0]); 
+            }
+
+            const n = parseInt(numRowsInput.value);
+            let currentTransform = new THREE.Matrix4(); // Identidad (Base O0)
+
+            let previousOrigin = new THREE.Vector3(0, 0, 0);
+            const frameOrigins = [previousOrigin.clone()];
+
+            for (let i = 1; i <= n; i++) {
+                // Obtener valores de la interfaz
+                const thetaType = document.getElementById(`theta_type_${i}`).value;
+                const qDeg = parseFloat(document.getElementById(`slider_q_${i}`).value);
+                let qRad = qDeg * Math.PI / 180;
+
+                if (thetaType === 'q_pi') qRad += Math.PI;
+                if (thetaType === 'q_npi') qRad -= Math.PI;
+                if (thetaType === '0') qRad = 0;
+                if (thetaType === 'pi_2') qRad = Math.PI / 2;
+
+                const dVal = parseFloat(document.getElementById(`d_val_${i}`).value) || 0;
+                const aVal = parseFloat(document.getElementById(`a_val_${i}`).value) || 0;
+                const alphaDeg = parseFloat(document.getElementById(`alpha_val_${i}`).value) || 0;
+                const alphaRad = alphaDeg * Math.PI / 180;
+
+                // Calcular matriz T_i
+                const Ti = dhMatrix(qRad, dVal, aVal, alphaRad);
+                
+                // Acumular transformación global H_i = H_{i-1} * T_i
+                currentTransform.multiply(Ti);
+
+                // Extraer posición del nuevo sistema móvil
+                const origin = new THREE.Vector3();
+                const quaternion = new THREE.Quaternion();
+                const scale = new THREE.Vector3();
+                currentTransform.decompose(origin, quaternion, scale);
+
+                frameOrigins.push(origin.clone());
+
+                // Dibujar eslabón (Cilindro de conexión entre origen anterior y actual)
+                const linkGeo = new THREE.CylinderGeometry(0.03, 0.03, previousOrigin.distanceTo(origin), 8);
+                const linkMat = new THREE.MeshStandardMaterial({ color: 0x38bdf8, roughness: 0.3 });
+                const linkMesh = new THREE.Mesh(linkGeo, linkMat);
+
+                // Posicionar y orientar el cilindro del eslabón
+                linkMesh.position.copy(previousOrigin).add(origin).multiplyScalar(0.5);
+                linkMesh.quaternion.setFromUnitVectors(
+                    new THREE.Vector3(0, 1, 0),
+                    new THREE.Vector3().subVectors(origin, previousOrigin).normalize()
+                );
+                robotGroup.add(linkMesh);
+
+                // Dibujar Sistema Móvil O_i con los 3 ejes RGB primarios
+                const mobileAxes = createCustomAxes(0.6);
+                mobileAxes.applyMatrix4(currentTransform);
+                robotGroup.add(mobileAxes);
+
+                previousOrigin.copy(origin);
+            }
+
+            // Actualizar rastro del efector final
+            historyPoints.push(previousOrigin.clone());
+            if (historyPoints.length > 150) historyPoints.shift();
+
+            while(trailGroup.children.length > 0) trailGroup.remove(trailGroup.children[0]);
+            if (historyPoints.length > 1) {
+                const trailGeo = new THREE.BufferGeometry().setFromPoints(historyPoints);
+                const trailMat = new THREE.LineBasicMaterial({ color: 0xf59e0b, linewidth: 2 });
+                const trailLine = new THREE.Line(trailGeo, trailMat);
+                trailGroup.add(trailLine);
+            }
+
+            // --- CÁLCULO DE PUNTO EN EFECTOR FINAL HACIA SISTEMA FIJO (T_0) ---
+            const ptX = parseFloat(document.getElementById('ptX').value) || 0;
+            const ptY = parseFloat(document.getElementById('ptY').value) || 0;
+            const ptZ = parseFloat(document.getElementById('ptZ').value) || 0;
+
+            const localPoint = new THREE.Vector4(ptX, ptY, ptZ, 1);
+            const globalPoint = localPoint.applyMatrix4(currentTransform);
+
+            document.getElementById('globalPointResult').textContent = 
+                `X: ${globalPoint.x.toFixed(2)}, Y: ${globalPoint.y.toFixed(2)}, Z: ${globalPoint.z.toFixed(2)}`;
+        }
+
+        // --- ANIMACIÓN Y RESPONSIVE ---
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = (window.innerWidth - 450) / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth - 450, window.innerHeight);
+        });
+
+        // Inicializar al cargar
+        initUI();
+    </script>
+</body>
+</html>
