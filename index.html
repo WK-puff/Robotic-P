@@ -150,6 +150,71 @@
     .matrix-total p{margin:0;font-size:10px;color:#a9a1a4}
     @media(max-width:560px){.angle-combo select{flex-basis:128px;width:128px;padding:0 7px!important;font-size:10px!important}.angle-combo input{padding:0 10px!important;font-size:12px!important}.matrix-factor-grid{grid-template-columns:1fr}.dh-math-card details>summary,.matrix-row-detail>summary{align-items:flex-start}.dh-math-card details>summary>b,.matrix-row-detail>summary>b{font-size:8px}}
 
+
+    /* Configuración de modo de cálculo, edición enfocada y utilidades móviles. */
+    .count-screen{max-width:820px}
+    .setup-choice-block{margin-bottom:28px}
+    .setup-choice-block h2{font-size:clamp(17px,2.4vw,22px);margin:0 0 13px;letter-spacing:-.03em}
+    .operation-modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .operation-mode{position:relative;display:flex;align-items:center;gap:13px;min-height:90px;padding:15px;text-align:left;border:1px solid #383c43;border-radius:9px;background:#111316;color:#d8dbe0;transition:border-color .2s,background .2s,transform .2s}
+    .operation-mode:hover{border-color:#777d86;transform:translateY(-1px)}
+    .operation-mode.selected{border-color:#c0444b;background:linear-gradient(125deg,#271518,#151619);box-shadow:inset 0 0 0 1px #e0444420,0 8px 24px #0003}
+    .operation-mode>span:nth-child(2){display:flex;flex-direction:column;gap:5px;min-width:0}
+    .operation-mode strong{font-size:12px;color:#f0f1f3}
+    .operation-mode small{font-size:10px;color:#969ca5;line-height:1.45}
+    .operation-mode>i{margin-left:auto;color:#777e88;font:normal 13px var(--mono)}
+    .operation-mode.selected>i{color:#ff6268}
+    .mode-icon{display:grid;place-items:center;flex:none;width:38px;height:38px;border:1px solid #3a3e46;border-radius:7px;background:#1b1e23;color:#ff777c;font:600 13px var(--mono)}
+    .visual-motion-setup{margin-top:20px;padding:16px;border:1px solid #343840;border-radius:9px;background:#111316}
+    .visual-motion-heading{display:flex;align-items:center;gap:11px;margin-bottom:15px}
+    .visual-motion-heading>div{min-width:0}
+    .visual-motion-heading h3{margin:0 0 4px;font-size:13px}
+    .visual-motion-heading p{margin:0;font-size:10px;color:#989ea7;line-height:1.5}
+    .visual-motion-select{width:100%;min-height:45px;border:1px solid #41464f;border-radius:7px;background:#0b0d0f;color:#f1f2f4;padding:0 12px;font:500 11px var(--mono)}
+    .visual-motion-select:focus{outline:2px solid #e04444;outline-offset:2px}
+    .review-cell.focused{border-color:#e04444;background:#35191c;box-shadow:0 0 0 2px #e0444430;transform:scale(1.035)}
+    .parameter-zoom-in{animation:parameterZoomIn .34s cubic-bezier(.2,.8,.2,1) both}
+    .parameter-zoom-out{animation:parameterZoomOut .25s ease both}
+    @keyframes parameterZoomIn{from{opacity:0;transform:scale(.91) translateY(8px);filter:blur(2px)}to{opacity:1;transform:scale(1);filter:blur(0)}}
+    @keyframes parameterZoomOut{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.94);filter:blur(1px)}}
+    .mobile-side-tabs{display:none}
+    .reset-simulation-wrap{display:flex;justify-content:center;margin:25px 0 4px;padding-top:19px;border-top:1px solid #292d32}
+    .reset-simulation{min-width:min(100%,310px);border-color:#67363b;color:#ff9a9e;background:#1b1113}
+    .reset-simulation:hover{border-color:#d14a51;background:#2a1518}
+    .symbolic-note{margin:0 0 16px;padding:11px 13px;border:1px solid #574047;border-radius:7px;background:#211619;color:#e6c9cc;font:10px/1.55 var(--mono)}
+    .matrix-symbolic .math-matrix td{color:#f0c9cc}
+    .matrix-symbolic .matrix-block-label{color:#ffb4b7}
+    .row-parameter-focus{animation:reviewFocus .38s ease both}
+    @keyframes reviewFocus{from{background:#33171a}to{background:transparent}}
+    @media(max-width:850px){
+      .mobile-side-tabs{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:12px 0 9px;padding:5px;border:1px solid #32363d;border-radius:9px;background:#0c0e10}
+      .mobile-side-tab{min-height:40px;border:1px solid transparent;border-radius:6px;background:transparent;color:#9da3ac;font-size:11px;font-weight:600}
+      .mobile-side-tab.active{border-color:#71343a;background:#281619;color:#fff}
+      .side-panel{display:block}
+      .side-panel .side-card{display:none}
+      .side-panel .side-card.mobile-active{display:block}
+      .operation-modes{grid-template-columns:1fr}
+    }
+    @media(max-width:560px){
+      .setup-choice-block{margin-bottom:23px}
+      .operation-mode{min-height:78px;padding:12px}
+      .visual-motion-setup{padding:13px}
+      .reset-simulation{width:100%}
+      .mobile-side-tabs{position:sticky;top:5px;z-index:8;backdrop-filter:blur(12px)}
+    }
+
+    /* Componentes angulares independientes: variable + constante pueden coexistir. */
+    .angle-component-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:2px 0 16px}
+    .angle-component-toggle{display:flex;align-items:center;gap:10px;min-height:58px;padding:11px 12px;border:1px solid #383c43;border-radius:8px;background:#111316;cursor:pointer;transition:.16s}
+    .angle-component-toggle:has(input:checked){border-color:#a53b42;background:#261619;box-shadow:inset 0 0 0 1px #e0444422}
+    .angle-component-toggle input{width:17px;height:17px;margin:0;accent-color:var(--red);flex:none}
+    .angle-component-toggle span{display:flex;flex-direction:column;gap:3px;min-width:0}
+    .angle-component-toggle strong{font:600 11px var(--mono);color:#f0f1f3}
+    .angle-component-toggle small{font-size:10px;color:#9298a1}
+    .angle-terms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .angle-expression{margin:14px 0 0;padding:11px 13px;border:1px solid #373b42;border-radius:7px;background:#0e1012;color:#e4d2d3;font:500 12px var(--mono);overflow-wrap:anywhere}
+    .angle-expression b{color:#ff8b90;font-weight:600}
+    @media(max-width:560px){.angle-component-options,.angle-terms{grid-template-columns:1fr}}
   </style>
   <script type="importmap">
     {"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}
@@ -168,9 +233,17 @@
       <div class="panel-head"><div class="panel-kicker"><i class="status-dot"></i><span id="setupKicker">CONFIGURACIÓN</span></div><span id="stepCount" class="step-count">INICIO</span></div>
       <div class="panel-content">
         <section id="countScreen" class="count-screen">
-          <h2>Número de movimientos</h2>
-          <p>Selecciona la cantidad de filas de tu tabla D–H.</p>
-          <div class="stepper"><span class="stepper-label">MOVIMIENTOS</span><button id="removeRow" type="button" aria-label="Reducir movimientos">−</button><div class="stepper-value"><strong id="rowCount">3</strong><span>FILAS</span></div><button id="addRow" type="button" aria-label="Aumentar movimientos">+</button></div>
+          <div class="setup-choice-block">
+            <h2>Número de movimientos</h2>
+            <div class="stepper"><span class="stepper-label">MOVIMIENTOS</span><button id="removeRow" type="button" aria-label="Reducir movimientos">−</button><div class="stepper-value"><strong id="rowCount">2</strong><span>FILAS</span></div><button id="addRow" type="button" aria-label="Aumentar movimientos">+</button></div>
+          </div>
+          <div class="setup-choice-block">
+            <h2>Tratamiento de variables</h2>
+            <div class="operation-modes" id="operationModes">
+              <button type="button" class="operation-mode selected" data-calc-mode="declared" aria-pressed="true"><span class="mode-icon">ƒ(x)</span><span><strong>Variables declaradas</strong><small>Ingresar valores numéricos o expresiones con π.</small></span><i>●</i></button>
+              <button type="button" class="operation-mode" data-calc-mode="symbolic" aria-pressed="false"><span class="mode-icon">Σ</span><span><strong>Variables sin declarar</strong><small>Conservar θ₁, d₁, a₁ y α₁ como símbolos.</small></span><i>○</i></button>
+            </div>
+          </div>
           <button id="beginSetup" class="btn-primary" type="button">Comenzar configuración <span aria-hidden="true">→</span></button>
         </section>
 
@@ -185,6 +258,16 @@
           <h2>Revisión de parámetros</h2>
           <p>Selecciona cualquier celda para corregir ese parámetro.</p>
           <div id="reviewTable" class="review-table-wrap"></div>
+          <section class="visual-motion-setup">
+            <div class="visual-motion-heading"><span class="mode-icon">↗</span><div><h3>Movimiento angular visual</h3><p>Movimiento auxiliar de ±45°. No modifica las matrices ni la pose acumulada.</p></div></div>
+            <label for="visualMotionMode" class="choice-label">MODO DE VISUALIZACIÓN</label>
+            <select id="visualMotionMode" class="visual-motion-select">
+              <option value="none">Sin movimiento angular extra</option>
+              <option value="perpendicular">Solo ángulos perpendiculares al plano (eje Z)</option>
+              <option value="parallel">Solo ángulos paralelos al plano (eje X)</option>
+              <option value="both">Ambos ejes (Z y X)</option>
+            </select>
+          </section>
           <div class="review-foot"><button id="reviewBack" class="btn-secondary" type="button">← Parámetro anterior</button><button id="generateScene" class="btn-primary" type="button">Generar simulación 3D →</button></div>
         </section>
       </div>
@@ -211,9 +294,13 @@
           <div class="card matrix-card"><div class="card-heading"><h3>Matriz resultante T₀ₙ</h3><span>POSE ACTUAL</span></div><div id="matrixResult" class="matrix-wrap"></div></div>
           <div class="card dh-math-card"><details id="matrixDerivationDetails"><summary><span><strong>Desarrollo matricial D–H</strong><small>Factores de cada fila y producto total T₀ₙ</small></span><b>VER MATRICES ＋</b></summary><div id="matrixDerivation" class="matrix-derivation"></div></details></div>
         </div>
+        <div class="mobile-side-tabs" role="tablist" aria-label="Paneles de la simulación">
+          <button type="button" class="mobile-side-tab active" data-side-tab="chain" role="tab" aria-selected="true">Cadena</button>
+          <button type="button" class="mobile-side-tab" data-side-tab="point" role="tab" aria-selected="false">Transformar punto</button>
+        </div>
         <aside class="side-panel">
-          <div class="card side-card"><h3>Cadena configurada</h3><div id="chainSummary" class="chain-list"></div></div>
-          <div class="card side-card point-card">
+          <div class="card side-card chain-card" id="chainCard"><h3>Cadena configurada</h3><div id="chainSummary" class="chain-list"></div></div>
+          <div class="card side-card point-card" id="pointCard">
             <h3>Transformación de punto</h3>
             <div class="point-grid">
               <div class="input-field"><label for="pointX">xₙ</label><input id="pointX" type="number" value="0.5" step="0.1"></div>
@@ -226,6 +313,7 @@
           </div>
         </aside>
       </div>
+      <div class="reset-simulation-wrap"><button id="resetSimulation" class="btn-secondary reset-simulation" type="button">↺ Reiniciar simulación desde cero</button></div>
     </section>
     <footer class="footer-note">DH / CINEMÁTICA DIRECTA / THREE.JS</footer>
   </main>
@@ -238,32 +326,37 @@
 
     const $ = (id) => document.getElementById(id);
     const defaults = () => ({
-      theta:{mode:'q',q0:0,amplitude:35,fixed:0,implicitQ:false},
-      d:{mode:'l',base:.25,amplitude:.08},
+      theta:{variable:true,constant:true,variableValue:45,constantValue:0},
+      d:{mode:'l',base:1,amplitude:.25},
       a:{mode:'l',base:1,amplitude:.25},
-      alpha:{fixed:0}
+      alpha:{variable:true,constant:true,variableValue:30,constantValue:0}
     });
-    let rows=Array.from({length:3},defaults);
-    let steps=[],stepIndex=0,currentStep=null,reviewReturnIndex=0;
-    let sceneReady=false,running=true,speed=1,animationToken=0,renderer,scene,camera,orbit,clock,rootGroup,frameGroups=[],segmentObjects=[];
+    let rows=Array.from({length:2},defaults);
+    let calculationMode='declared',visualMotionMode='none';
+    let steps=[],stepIndex=0,currentStep=null,reviewReturnIndex=0,singleEditMode=false,focusedReview={row:-1,key:''};
+    let sceneReady=false,running=true,speed=1,animationToken=0,renderer,scene,camera,orbit,rootGroup,frameGroups=[],segmentObjects=[];
     let pointMarker,pointLine,pointHasBeenCalculated=false,finalTransform=new THREE.Matrix4(),lastUiUpdate=0,toastTimer,resizeObserver;
     let latestPositions=[];
-    let simTime=0;
+    let simTime=0,lastFrameTimestamp=0,animationFaulted=false;
     const PHASE_NAMES=['ROTACIÓN θ','TRASLACIÓN d','TRASLACIÓN a','ROTACIÓN α'];
     const PHASE_HINTS=['Rotación alrededor del eje z del sistema anterior.','Desplazamiento sobre el eje z: se construye la cota d.','Desplazamiento sobre el eje x: se construye la cota a.','Torsión alrededor del eje x: queda definida la orientación del nuevo marco.'];
-    const PHASE_DURATION=1.05,ROW_DURATION=PHASE_DURATION*4,HOLD_DURATION=5.0;
+    const PHASE_DURATION=1.05,ROW_DURATION=PHASE_DURATION*4,VISUAL_DURATION=1.8,HOLD_DURATION=5.0;
     const anglePresets=[['0','0'],['π/6','pi/6'],['π/4','pi/4'],['π/3','pi/3'],['π/2','pi/2'],['2π/3','2pi/3'],['3π/4','3pi/4'],['π','pi'],['3π/2','3pi/2'],['2π','2pi'],['−π/6','-pi/6'],['−π/4','-pi/4'],['−π/3','-pi/3'],['−π/2','-pi/2'],['−2π/3','-2pi/3'],['−3π/4','-3pi/4'],['−π','-pi'],['−3π/2','-3pi/2'],['−2π','-2pi']];
     const names={theta:'θ / THETA',d:'d',a:'a',alpha:'α / ALPHA'};
     const format=(n,d=2)=>Number(n).toFixed(d).replace(/^-0\.00$/,'0.00');
     const fmtAngle=(rad)=>`${format(THREE.MathUtils.radToDeg(rad),1)}°`;
     const setToast=(message)=>{const t=$('toast');t.textContent=message;t.classList.remove('hidden');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.add('hidden'),2200)};
 
-    function updateCount(){ $('rowCount').textContent=rows.length;$('removeRow').disabled=rows.length<=3;$('addRow').disabled=rows.length>=6; }
+    function updateCount(){ $('rowCount').textContent=rows.length;$('removeRow').disabled=rows.length<=2;$('addRow').disabled=rows.length>=6; }
     $('addRow').addEventListener('click',()=>{if(rows.length<6){rows.push(defaults());updateCount();}});
-    $('removeRow').addEventListener('click',()=>{if(rows.length>3){rows.pop();updateCount();}});
+    $('removeRow').addEventListener('click',()=>{if(rows.length>2){rows.pop();updateCount();}});
+    document.querySelectorAll('[data-calc-mode]').forEach(btn=>btn.addEventListener('click',()=>{
+      calculationMode=btn.dataset.calcMode;
+      document.querySelectorAll('[data-calc-mode]').forEach(b=>{const active=b===btn;b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active));b.querySelector('i').textContent=active?'●':'○'});
+    }));
 
     function buildSteps(){steps=[];rows.forEach((_,rowIndex)=>['theta','d','a','alpha'].forEach(key=>steps.push({rowIndex,key})));}
-    function beginWizard(){buildSteps();stepIndex=0;$('countScreen').classList.add('hidden');$('reviewScreen').classList.add('hidden');$('wizard').classList.remove('hidden');$('setupKicker').textContent='CONFIGURACIÓN';renderWizard();}
+    function beginWizard(){buildSteps();stepIndex=0;singleEditMode=false;$('countScreen').classList.add('hidden');$('reviewScreen').classList.add('hidden');$('wizard').classList.remove('hidden');$('setupKicker').textContent='CONFIGURACIÓN';renderWizard();}
     $('beginSetup').addEventListener('click',beginWizard);
 
     function field(label,id,value,step='any',min=null,max=null){return `<div class="input-field"><label for="${id}">${label}</label><input id="${id}" type="number" step="${step}" value="${value}" ${min!==null?`min="${min}"`:''} ${max!==null?`max="${max}"`:''}></div>`;}
@@ -283,6 +376,19 @@
       throw new Error('Usa grados (45) o una expresión como π/2, −π o 3π/4.');
     }
     function angleDegrees(value){return THREE.MathUtils.radToDeg(parseAngle(value));}
+    function angleComponentToggle(id,label,checked,detail){
+      const component=id.toLowerCase().includes('constant')?'constant':'variable';
+      return `<label class="angle-component-toggle"><input id="${id}" data-angle-toggle="${component}" type="checkbox" ${checked?'checked':''}><span><strong>${label}</strong><small>${detail}</small></span></label>`;
+    }
+    function symbolicAngleExpression(parameter,index){
+      const variableSymbol=parameter==='theta'?`q_${index+1}`:`alpha_${index+1}`;
+      const constantSymbol=parameter==='theta'?`theta_${index+1}`:`alpha^0_${index+1}`;
+      const p=rows[index][parameter],terms=[];
+      if(p.variable)terms.push(variableSymbol);
+      if(p.constant)terms.push(constantSymbol);
+      return terms.length?terms.join(' + '):'0';
+    }
+    function declaredAngleValue(p){return (p.variable?p.variableValue:0)+(p.constant?p.constantValue:0);}
     function bindAnglePreset(inputId,selectId){
       const input=$(inputId),select=$(selectId),preview=$(`${inputId}Preview`);if(!input||!select)return;
       select.addEventListener('change',()=>{if(!select.value)return;input.value=select.value;input.dispatchEvent(new Event('input',{bubbles:true}));});
@@ -295,73 +401,115 @@
       $('progressLabel').textContent=`MOVIMIENTO ${String(rowIndex+1).padStart(2,'0')} / ${String(rows.length).padStart(2,'0')}`;
       $('progressPercent').textContent=`${Math.round(progress)}%`;$('progressFill').style.width=`${progress}%`;
       $('backStep').disabled=stepIndex===0;$('backStep').style.opacity=stepIndex===0?'.35':'1';
-      $('nextStep').textContent=stepIndex===total-1?'Revisar parámetros →':'Continuar →';
-      let title='',prompt='',body='';
-      if(key==='theta'){
-        title='Ángulo θ';prompt='Selecciona el comportamiento de la articulación.';
-        const qImplicit=`<label class="implicit-q-option"><input id="implicitQ" type="checkbox" ${p.implicitQ?'checked':''}><span><strong>Articulación variable q sin valor explícito</strong><small>Pose inicial de +45° y arco CAD de recorrido simétrico.</small></span></label>`;
-        const qFields=p.mode==='q'?(p.implicitQ?'':`${angleControl('Ángulo base q₀','q0',p.q0,'q0Preset')}<div class="field-grid" style="margin-top:14px">${field('Amplitud de giro · grados','qAmp',p.amplitude,1,0,720)}</div>`):angleControl('Ángulo constante θ','thetaFixed',p.fixed,'thetaPreset');
-        body=`<span class="choice-label">TIPO DE ARTICULACIÓN</span><div class="choice-row" id="modeChoices">${choice('Variable','q',p.mode==='q','q(t) · rotacional')}${choice('Constante','fixed',p.mode==='fixed','θ · ángulo fijo')}</div>${p.mode==='q'?qImplicit:''}<div id="thetaFields">${qFields}</div>`;
+      $('nextStep').textContent=singleEditMode?'Guardar y volver a tabla →':(stepIndex===total-1?'Revisar parámetros →':'Continuar →');
+      let title='',prompt='',body='',angleBindings=[];
+      if(key==='theta'||key==='alpha'){
+        const isTheta=key==='theta',symbol=isTheta?'q':'α',constantSymbol=isTheta?'θ':'α⁰';
+        title=isTheta?'Ángulo θ':'Ángulo α';
+        prompt=isTheta?'Combina una articulación variable, un ángulo constante o ambos.':'Combina una torsión variable, un ángulo constante o ambos.';
+        const vToggle=isTheta?'thetaVariableToggle':'alphaVariableToggle',cToggle=isTheta?'thetaConstantToggle':'alphaConstantToggle';
+        const vInput=isTheta?'thetaVariableValue':'alphaVariableValue',cInput=isTheta?'thetaConstantValue':'alphaConstantValue';
+        const vPreset=vInput+'Preset',cPreset=cInput+'Preset';
+        body=`<span class="choice-label">COMPONENTES ANGULARES · SELECCIÓN INDEPENDIENTE</span><div class="angle-component-options">${angleComponentToggle(vToggle,isTheta?'Variable q(t)':'Variable α(t)',p.variable,isTheta?'Articulación rotacional':'Torsión variable')}${angleComponentToggle(cToggle,'Constante',p.constant,isTheta?'Desfase θ fijo':'Torsión fija α⁰')}</div>`;
+        if(calculationMode==='declared'){
+          const terms=[];
+          if(p.variable)terms.push(angleControl(`Valor declarado de ${symbol}${rowIndex+1}`,vInput,p.variableValue,vPreset));
+          if(p.constant)terms.push(angleControl(`Ángulo constante ${constantSymbol}${rowIndex+1}`,cInput,p.constantValue,cPreset));
+          body+=`<div class="angle-terms">${terms.join('')}</div>`;
+          terms.forEach((_,idx)=>{const ids=[];if(p.variable)ids.push([vInput,vPreset]);if(p.constant)ids.push([cInput,cPreset]);angleBindings=ids;});
+          const expr=[p.variable?`${symbol}${rowIndex+1}(t)`:null,p.constant?`${constantSymbol}${rowIndex+1}`:null].filter(Boolean).join(' + ')||'0';
+          body+=`<div class="angle-expression">${isTheta?'θ':'α'}<sub>${rowIndex+1}</sub> = <b>${expr}</b></div>`;
+        }else{
+          const expr=symbolicAngleExpression(key,rowIndex);
+          body+=`<div class="symbolic-note">${isTheta?'θ':'α'}<sub>${rowIndex+1}</sub> = <strong>${expr}</strong>. Los términos se mantienen simbólicos; la pose final de referencia usa 0°. Si seleccionaste una variable, se muestra un barrido angular ilustrativo durante su fase.</div>`;
+        }
+        if(!p.variable&&!p.constant)body+=`<p class="field-help">No hay componentes seleccionados; este ángulo se toma como 0°.</p>`;
       }else if(key==='d'||key==='a'){
         title=`Distancia ${key}`;prompt=key==='d'?'Desplazamiento sobre el eje z.':'Longitud sobre el eje x.';
-        const unit=key==='d'?'Desplazamiento base':'Longitud base';
-        body=`<span class="choice-label">TIPO DE PARÁMETRO</span><div class="choice-row" id="modeChoices">${choice('Variable','d',p.mode==='d','d(t) · prismática')}${choice('Constante','l',p.mode==='l','l · longitud fija')}</div><div id="distanceFields"><div class="field-grid">${field(unit,'distanceBase',p.base,.01,0)}${p.mode==='d'?field('Amplitud de recorrido','distanceAmp',p.amplitude,.01,0):''}</div></div>`;
-      }else{
-        title='Ángulo α';prompt='Ángulo de torsión alrededor del eje x.';
-        body=angleControl('Ángulo constante α','alphaFixed',p.fixed,'alphaPreset');
+        body=`<span class="choice-label">COMPORTAMIENTO DE ${key.toUpperCase()}</span><div class="choice-row" id="modeChoices">${choice('Variable','d',p.mode==='d','d(t) · variable')}${choice('Constante','l',p.mode==='l','l · fija')}</div>`;
+        if(calculationMode==='declared'){
+          const unit=key==='d'?'Valor de d':'Valor de a';
+          body+=`<div class="field-grid">${field(unit,'distanceBase',p.base,.01,0)}${p.mode==='d'?field('Amplitud de recorrido','distanceAmp',p.amplitude,.01,0):''}</div>`;
+        }else{
+          body+=`<div class="symbolic-note">${key}<sub>${rowIndex+1}</sub> se conserva como símbolo. La escena usa una longitud de referencia unitaria (1).</div>`;
+        }
       }
-      $('wizardCard').innerHTML=`<div class="wizard-meta"><span class="movement-chip">MOV. ${String(rowIndex+1).padStart(2,'0')}</span><span class="param-name">${names[key]}</span></div><h2 class="wizard-title">${title}</h2><p class="wizard-prompt">${prompt}</p>${body}`;
-      $('wizardCard').classList.remove('wizard-card');void $('wizardCard').offsetWidth;$('wizardCard').classList.add('wizard-card');
+      $('wizardCard').innerHTML=`<div class="wizard-meta"><span class="movement-chip">MOV. ${String(rowIndex+1).padStart(2,'0')}</span><span class="param-name">${names[key]}</span><span class="param-name">${calculationMode==='declared'?'VALORES DECLARADOS':'MODO SIMBÓLICO'}</span></div><h2 class="wizard-title">${title}</h2><p class="wizard-prompt">${prompt}</p>${body}`;
+      $('wizardCard').classList.remove('wizard-card','parameter-zoom-in','parameter-zoom-out');void $('wizardCard').offsetWidth;$('wizardCard').classList.add('wizard-card',singleEditMode?'parameter-zoom-in':'wizard-card');
       bindWizardControls();
-      if(key==='theta'){
-        if(p.mode==='q')bindAnglePreset('q0','q0Preset');else bindAnglePreset('thetaFixed','thetaPreset');
-      }else if(key==='alpha')bindAnglePreset('alphaFixed','alphaPreset');
+      angleBindings.forEach(([inputId,presetId])=>bindAnglePreset(inputId,presetId));
     }
     function bindWizardControls(){
       const host=$('wizardCard');
+      host.querySelectorAll('[data-angle-toggle]').forEach(input=>input.addEventListener('change',()=>{
+        if(!saveCurrentStep()){input.checked=!input.checked;return;}
+        const {rowIndex,key}=currentStep;const p=rows[rowIndex][key];
+        p[input.dataset.angleToggle]=input.checked;
+        renderWizard();
+      }));
       host.querySelectorAll('[data-choice]').forEach(btn=>btn.addEventListener('click',()=>{
         if(!saveCurrentStep())return;
         const {rowIndex,key}=currentStep;const selected=btn.dataset.choice;
-        if(key==='theta'){
-          const p=rows[rowIndex].theta;
-          if(selected==='fixed'&&p.mode!=='fixed'){p.fixed=p.implicitQ?45:p.q0;p.implicitQ=false;}
-          if(selected==='q'&&p.mode!=='q')p.q0=p.fixed;
-          p.mode=selected;
-        }else{rows[rowIndex][key].mode=selected;}
+        rows[rowIndex][key].mode=selected;
+        if(calculationMode==='symbolic'&&(key==='d'||key==='a')){rows[rowIndex][key].base=1;rows[rowIndex][key].amplitude=0;}
         renderWizard();
       }));
-      const implicit=$('implicitQ');
-      if(implicit)implicit.addEventListener('change',()=>{
-        if(!saveCurrentStep()){implicit.checked=!implicit.checked;return;}
-        rows[currentStep.rowIndex].theta.implicitQ=implicit.checked;
-        renderWizard();
-      });
     }
     function saveCurrentStep(){
       if(!currentStep)return true;const {rowIndex,key}=currentStep;
       try{
-        if(key==='theta'){
-          const p=rows[rowIndex].theta;
-          if(p.mode==='q'){
-            if(!p.implicitQ){p.q0=angleDegrees($('q0')?.value??p.q0);p.amplitude=Math.max(0,Number($('qAmp')?.value??p.amplitude)||0);}
-          }else p.fixed=angleDegrees($('thetaFixed')?.value??p.fixed);
+        if(key==='theta'||key==='alpha'){
+          const p=rows[rowIndex][key];
+          if(calculationMode==='declared'){
+            const variableId=key==='theta'?'thetaVariableValue':'alphaVariableValue';
+            const constantId=key==='theta'?'thetaConstantValue':'alphaConstantValue';
+            if(p.variable){const input=$(variableId);if(input)p.variableValue=angleDegrees(input.value);}
+            if(p.constant){const input=$(constantId);if(input)p.constantValue=angleDegrees(input.value);}
+          }
         }else if(key==='d'||key==='a'){
-          const p=rows[rowIndex][key];p.base=Math.max(0,Number($('distanceBase')?.value??p.base)||0);if(p.mode==='d')p.amplitude=Math.max(0,Number($('distanceAmp')?.value??p.amplitude)||0);
-        }else rows[rowIndex].alpha.fixed=angleDegrees($('alphaFixed')?.value??rows[rowIndex].alpha.fixed);
+          const p=rows[rowIndex][key];
+          if(calculationMode==='declared'){
+            p.base=Math.max(0,Number($('distanceBase')?.value??p.base)||0);
+            if(p.mode==='d')p.amplitude=Math.max(0,Number($('distanceAmp')?.value??p.amplitude)||0);
+          }else{p.base=1;p.amplitude=0;}
+        }
         return true;
       }catch(err){setToast(err.message);return false;}
     }
     function showReview(){
-      $('wizard').classList.add('hidden');$('reviewScreen').classList.remove('hidden');$('setupKicker').textContent='REVISIÓN';$('stepCount').textContent=`${rows.length} MOVIMIENTOS`;
+      $('wizard').classList.add('hidden');$('reviewScreen').classList.remove('hidden');$('setupKicker').textContent='REVISIÓN';$('stepCount').textContent=`${rows.length} MOVIMIENTOS · ${calculationMode==='declared'?'DECLARADAS':'SIMBÓLICAS'}`;
       const labels=['θ','d','a','α'];const keys=['theta','d','a','alpha'];
-      const summary=(p,key)=>{if(key==='theta')return p.mode==='q'?(p.implicitQ?'q variable · pose inicial +45°':`q(t) · q₀ ${format(p.q0,1)}° · A ${format(p.amplitude,1)}°`):`${format(p.fixed,1)}° · constante`;if(key==='alpha')return `${format(p.fixed,1)}° · constante`;return p.mode==='d'?`d(t) = ${format(p.base)} + ${format(p.amplitude)} · variable`:`l = ${format(p.base)} · constante`;};
-      $('reviewTable').innerHTML=`<table class="review-table"><thead><tr><th>#</th>${labels.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map((r,i)=>`<tr><td style="font:600 11px var(--mono);color:#898c92">${i+1}</td>${keys.map(k=>`<td><button class="review-cell" type="button" data-row="${i}" data-key="${k}">${summary(r[k],k)}<small>Editar</small></button></td>`).join('')}</tr>`).join('')}</tbody></table>`;
-      $('reviewTable').querySelectorAll('[data-row]').forEach(btn=>btn.addEventListener('click',()=>{const target=steps.findIndex(s=>s.rowIndex===Number(btn.dataset.row)&&s.key===btn.dataset.key);if(target>=0){stepIndex=target;$('reviewScreen').classList.add('hidden');$('wizard').classList.remove('hidden');$('setupKicker').textContent='CONFIGURACIÓN';renderWizard();}}));
+      const summary=(p,key,i)=>{
+        if(key==='theta'||key==='alpha'){
+          if(calculationMode==='symbolic')return symbolicAngleExpression(key,i).replaceAll('_','')+' · símbolo';
+          const variableLabel=key==='theta'?`q${i+1}`:`α${i+1}(t)`;
+          const constantLabel=key==='theta'?`θ${i+1}`:`α⁰${i+1}`;
+          const terms=[];
+          if(p.variable)terms.push(`${variableLabel} = ${format(p.variableValue,1)}°`);
+          if(p.constant)terms.push(`${constantLabel} = ${format(p.constantValue,1)}°`);
+          return terms.length?terms.join(' + '):'0°';
+        }
+        if(calculationMode==='symbolic')return `${key}${i+1} · referencia 1`;
+        return p.mode==='d'?`${key}(t) = ${format(p.base)} + ${format(p.amplitude)} · variable`:`l = ${format(p.base)} · constante`;
+      };
+      $('reviewTable').innerHTML=`<table class="review-table"><thead><tr><th>#</th>${labels.map(x=>`<th>${x}</th>`).join('')}</tr></thead><tbody>${rows.map((r,i)=>`<tr class="${focusedReview.row===i?'row-parameter-focus':''}"><td style="font:600 11px var(--mono);color:#898c92">${i+1}</td>${keys.map(k=>`<td><button class="review-cell ${focusedReview.row===i&&focusedReview.key===k?'focused':''}" type="button" data-row="${i}" data-key="${k}">${summary(r[k],k,i)}<small>Editar este parámetro</small></button></td>`).join('')}</tr>`).join('')}</tbody></table>`;
+      $('visualMotionMode').value=visualMotionMode;
+      $('reviewTable').querySelectorAll('[data-row]').forEach(btn=>btn.addEventListener('click',()=>{
+        const target=steps.findIndex(st=>st.rowIndex===Number(btn.dataset.row)&&st.key===btn.dataset.key);
+        if(target>=0){focusedReview={row:Number(btn.dataset.row),key:btn.dataset.key};singleEditMode=true;stepIndex=target;$('reviewScreen').classList.add('hidden');$('wizard').classList.remove('hidden');$('setupKicker').textContent='EDICIÓN PUNTUAL';renderWizard();}
+      }));
     }
-    $('nextStep').addEventListener('click',()=>{if(!saveCurrentStep())return;if(stepIndex<steps.length-1){stepIndex++;renderWizard()}else{reviewReturnIndex=stepIndex;showReview()}});
+    $('visualMotionMode').addEventListener('change',e=>{visualMotionMode=e.target.value;});
+    $('nextStep').addEventListener('click',()=>{
+      if(!saveCurrentStep())return;
+      if(singleEditMode){
+        singleEditMode=false;const card=$('wizardCard');card.classList.remove('parameter-zoom-in');card.classList.add('parameter-zoom-out');setTimeout(()=>showReview(),180);return;
+      }
+      if(stepIndex<steps.length-1){stepIndex++;renderWizard()}else{reviewReturnIndex=stepIndex;showReview()}
+    });
     $('backStep').addEventListener('click',()=>{if(!saveCurrentStep())return;if(stepIndex>0){stepIndex--;renderWizard()}});
-    $('cancelSetup').addEventListener('click',()=>{if(!saveCurrentStep())return;$('wizard').classList.add('hidden');$('reviewScreen').classList.add('hidden');$('countScreen').classList.remove('hidden');$('setupKicker').textContent='CONFIGURACIÓN';$('stepCount').textContent='INICIO'});
-    $('reviewBack').addEventListener('click',()=>{stepIndex=Math.min(reviewReturnIndex,steps.length-1);$('reviewScreen').classList.add('hidden');$('wizard').classList.remove('hidden');$('setupKicker').textContent='CONFIGURACIÓN';renderWizard()});
+    $('cancelSetup').addEventListener('click',()=>{if(!saveCurrentStep())return;if(singleEditMode){singleEditMode=false;showReview();return;}$('wizard').classList.add('hidden');$('reviewScreen').classList.add('hidden');$('countScreen').classList.remove('hidden');$('setupKicker').textContent='CONFIGURACIÓN';$('stepCount').textContent='INICIO'});
+    $('reviewBack').addEventListener('click',()=>{stepIndex=Math.min(reviewReturnIndex,steps.length-1);singleEditMode=false;$('reviewScreen').classList.add('hidden');$('wizard').classList.remove('hidden');$('setupKicker').textContent='CONFIGURACIÓN';renderWizard()});
 
     function makeTextSprite(text,options={}){
       const canvas=document.createElement('canvas'),ctx=canvas.getContext('2d');canvas.width=512;canvas.height=128;
@@ -418,29 +566,33 @@
     function rzTz(theta,d){const c=Math.cos(theta),s=Math.sin(theta);return new THREE.Matrix4().set(c,-s,0,0,s,c,0,0,0,0,1,d,0,0,0,1)}
     function smooth01(x){x=Math.max(0,Math.min(1,x));return x*x*(3-2*x)}
     function targetValues(row){
-      const theta=row.theta.mode==='q'?(row.theta.implicitQ?THREE.MathUtils.degToRad(45):THREE.MathUtils.degToRad(row.theta.q0+row.theta.amplitude)):THREE.MathUtils.degToRad(row.theta.fixed);
+      if(calculationMode==='symbolic')return{theta:0,d:1,a:1,alpha:0};
+      const theta=THREE.MathUtils.degToRad(declaredAngleValue(row.theta));
       const d=row.d.mode==='d'?row.d.base+row.d.amplitude:row.d.base;
       const a=row.a.mode==='d'?row.a.base+row.a.amplitude:row.a.base;
-      return{theta,d,a,alpha:THREE.MathUtils.degToRad(row.alpha.fixed)};
+      const alpha=THREE.MathUtils.degToRad(declaredAngleValue(row.alpha));
+      return{theta,d,a,alpha};
     }
     function composeDH(theta,d,a,alpha){return new THREE.Matrix4().makeRotationZ(theta).multiply(new THREE.Matrix4().makeTranslation(0,0,d)).multiply(new THREE.Matrix4().makeTranslation(a,0,0)).multiply(new THREE.Matrix4().makeRotationX(alpha))}
     function calculateFinalTransform(){const result=new THREE.Matrix4().identity();rows.forEach(row=>{const v=targetValues(row);result.multiply(composeDH(v.theta,v.d,v.a,v.alpha))});return result}
     function createSceneSequence(){
       $('dhSequence').innerHTML=rows.map((row,i)=>`<div class="dh-row" id="dhRow${i}"><div class="dh-index">A${i+1}</div><div class="dh-cell" data-cell="0">θ${i+1}<br><small>—</small></div><div class="dh-cell" data-cell="1">d${i+1}<br><small>—</small></div><div class="dh-cell" data-cell="2">a${i+1}<br><small>—</small></div><div class="dh-cell" data-cell="3">α${i+1}<br><small>—</small></div><div class="dh-state">PENDIENTE</div></div>`).join('');
     }
-    function updateStageUI(rowIndex,phaseIndex,phaseProgress,instant,completed){
+    function updateStageUI(rowIndex,phaseIndex,phaseProgress,instant,completed,visualPhase=false,visualProgress=0){
       const isComplete=completed||rowIndex<0;
-      if(isComplete){$('stageCounter').textContent=`${rows.length*4} / ${rows.length*4} · COMPLETO`;$('stageTitle').textContent='Cadena D–H construida';$('stageValue').textContent='T₀ₙ DEFINIDA';$('stageHint').textContent='Todos los sistemas móviles permanecen en su pose final. El ciclo volverá a comenzar.';$('stageProgress').style.width='100%';$('stageEquation').querySelectorAll('[data-phase]').forEach(el=>el.classList.remove('active'));$('sequenceStatus').textContent='CADENA COMPLETA';}
-      else{
-        const row=rows[rowIndex],v=instant[rowIndex];$('stageCounter').textContent=`${rowIndex*4+phaseIndex+1} / ${rows.length*4}`;$('stageTitle').textContent=`A${rowIndex+1} · ${PHASE_NAMES[phaseIndex]}`;
+      if(isComplete){$('stageCounter').textContent=`${rows.length*4} / ${rows.length*4} · COMPLETO`;$('stageTitle').textContent='Cadena D–H construida';$('stageValue').textContent='T₀ₙ DEFINIDA';$('stageHint').textContent='Los movimientos visuales auxiliares no modifican la transformación acumulada.';$('stageProgress').style.width='100%';$('stageEquation').querySelectorAll('[data-phase]').forEach(el=>el.classList.remove('active'));$('sequenceStatus').textContent='CADENA COMPLETA';}
+      else if(visualPhase){
+        $('stageCounter').textContent=`MOVIMIENTO ${String(rowIndex+1).padStart(2,'0')} · VISTA`;$('stageTitle').textContent=`O${rowIndex+1} · Movimiento angular auxiliar`;$('stageValue').textContent='SOLO VISUAL';$('stageHint').textContent='La orientación DH se restaura antes de construir la siguiente fila.';$('stageProgress').style.width=`${visualProgress*100}%`;$('stageEquation').querySelectorAll('[data-phase]').forEach(el=>el.classList.remove('active'));$('sequenceStatus').textContent='VISTA AUXILIAR';
+      }else{
+        const v=instant[rowIndex];$('stageCounter').textContent=`${rowIndex*4+phaseIndex+1} / ${rows.length*4}`;$('stageTitle').textContent=`A${rowIndex+1} · ${PHASE_NAMES[phaseIndex]}`;
         let display='';if(phaseIndex===0)display=`θ${rowIndex+1} = ${fmtAngle(v.theta)}`;if(phaseIndex===1)display=`d${rowIndex+1} = ${format(v.d)}`;if(phaseIndex===2)display=`a${rowIndex+1} = ${format(v.a)}`;if(phaseIndex===3)display=`α${rowIndex+1} = ${fmtAngle(v.alpha)}`;
         $('stageValue').textContent=display;$('stageHint').textContent=PHASE_HINTS[phaseIndex];$('stageProgress').style.width=`${phaseProgress*100}%`;
         $('stageEquation').querySelectorAll('[data-phase]').forEach(el=>el.classList.toggle('active',Number(el.dataset.phase)===phaseIndex));$('sequenceStatus').textContent=`RESOLVIENDO A${rowIndex+1}`;
       }
       rows.forEach((row,i)=>{
         const el=$(`dhRow${i}`);if(!el)return;el.classList.toggle('active',!isComplete&&i===rowIndex);el.classList.toggle('done',isComplete||i<rowIndex);
-        const status=el.querySelector('.dh-state');status.textContent=isComplete||i<rowIndex?'RESUELTA':i===rowIndex?'EN PROCESO':'PENDIENTE';
-        el.querySelectorAll('[data-cell]').forEach(cell=>cell.classList.toggle('active',!isComplete&&i===rowIndex&&Number(cell.dataset.cell)===phaseIndex));
+        const status=el.querySelector('.dh-state');status.textContent=isComplete||i<rowIndex?'RESUELTA':i===rowIndex?(visualPhase?'VISTA':'EN PROCESO'):'PENDIENTE';
+        el.querySelectorAll('[data-cell]').forEach(cell=>cell.classList.toggle('active',!isComplete&&i===rowIndex&&!visualPhase&&Number(cell.dataset.cell)===phaseIndex));
       });
     }
     function initScene(){
@@ -456,43 +608,107 @@
       for(let i=0;i<rows.length;i++){
         const frame=new THREE.Group();addAxes(frame,axisLength*1.04);const dot=new THREE.Mesh(new THREE.SphereGeometry(.055,16,12),new THREE.MeshStandardMaterial({color:0xffffff,emissive:0x777777,emissiveIntensity:.7}));frame.add(dot);const name=makeTextSprite(`O${i+1}`,{scaleX:.25,scaleY:.085,fontSize:40});name.position.set(0,0,-.19);frame.add(name);frame.visible=false;rootGroup.add(frame);frameGroups.push(frame);
         const dRod=makeRod(0x9da2aa),aRod=makeRod(0xd0d2d6);rootGroup.add(dRod,aRod);
-        const dDimension=makeDimension(0xf06b70),aDimension=makeDimension(0xc5cbd3),qDimension=makeAngularDimension();rootGroup.add(dDimension.group,aDimension.group,qDimension.group);
+        const dDimension=makeDimension(0xf06b70),aDimension=makeDimension(0xc5cbd3),visualArcZ=makeAngularDimension(),visualArcX=makeAngularDimension();visualArcX.group.rotation.y=Math.PI/2;rootGroup.add(dDimension.group,aDimension.group,visualArcZ.group,visualArcX.group);
         const joint=new THREE.Mesh(new THREE.SphereGeometry(.075,18,14),new THREE.MeshStandardMaterial({color:0xf04449,metalness:.35,roughness:.34,emissive:0x66191d,emissiveIntensity:.65}));rootGroup.add(joint);
-        segmentObjects.push({dRod,aRod,dDimension,aDimension,qDimension,joint});
+        segmentObjects.push({dRod,aRod,dDimension,aDimension,visualArcZ,visualArcX,joint});
       }
       pointMarker=new THREE.Mesh(new THREE.SphereGeometry(.085,18,12),new THREE.MeshStandardMaterial({color:0xf2f2f2,emissive:0x888888,emissiveIntensity:.7}));pointMarker.visible=false;scene.add(pointMarker);pointLine=makeLine(0xf04449,true);pointLine.visible=false;scene.add(pointLine);
-      clock=new THREE.Clock();clock.start();resizeRenderer();window.addEventListener('resize',resizeRenderer);if('ResizeObserver'in window){resizeObserver=new ResizeObserver(resizeRenderer);resizeObserver.observe($('viewport').parentElement)}animate(animationToken);
+      resizeRenderer();window.addEventListener('resize',resizeRenderer);if('ResizeObserver'in window){resizeObserver=new ResizeObserver(resizeRenderer);resizeObserver.observe($('viewport').parentElement)}
     }
     function resizeRenderer(){if(!renderer||!camera)return;const box=$('viewport').getBoundingClientRect();if(!box.width||!box.height)return;renderer.setSize(box.width,box.height,false);camera.aspect=box.width/box.height;camera.updateProjectionMatrix()}
     function evaluatePose(elapsed){
       if(!scene)return;
-      const buildDuration=rows.length*ROW_DURATION,cycleDuration=buildDuration+HOLD_DURATION,cycleTime=elapsed%cycleDuration;
-      const isComplete=cycleTime>=buildDuration;let activeRow=isComplete?-1:Math.floor(cycleTime/ROW_DURATION);let rowElapsed=isComplete?ROW_DURATION:cycleTime-activeRow*ROW_DURATION;
-      const phaseIndex=isComplete?3:Math.min(3,Math.floor(rowElapsed/PHASE_DURATION));const phaseProgress=isComplete?1:smooth01((rowElapsed-phaseIndex*PHASE_DURATION)/PHASE_DURATION);
+      const extraVisual=visualMotionMode!=='none';
+      const rowCycleDuration=ROW_DURATION+(extraVisual?VISUAL_DURATION:0);
+      const buildDuration=rows.length*rowCycleDuration,cycleDuration=buildDuration+HOLD_DURATION,cycleTime=elapsed%cycleDuration;
+      const isComplete=cycleTime>=buildDuration;
+      const activeRow=isComplete?-1:Math.floor(cycleTime/rowCycleDuration);
+      const rowElapsed=isComplete?ROW_DURATION:cycleTime-activeRow*rowCycleDuration;
+      const visualPhase=!isComplete&&extraVisual&&rowElapsed>=ROW_DURATION;
+      const visualProgress=visualPhase?smooth01((rowElapsed-ROW_DURATION)/VISUAL_DURATION):0;
+      const phaseIndex=isComplete||visualPhase?3:Math.min(3,Math.floor(rowElapsed/PHASE_DURATION));
+      const phaseProgress=isComplete||visualPhase?1:smooth01((rowElapsed-phaseIndex*PHASE_DURATION)/PHASE_DURATION);
       let cumulative=new THREE.Matrix4().identity();latestPositions=[new THREE.Vector3(0,0,0)];frameGroups[0].position.set(0,0,0);frameGroups[0].quaternion.identity();const instant=[];
       rows.forEach((row,i)=>{
-        const target=targetValues(row);let t=0,d=0,a=0,alpha=0;let started=false,complete=isComplete||i<activeRow;
+        const target=targetValues(row);let t=0,d=0,a=0,alpha=0;let started=false;
+        const complete=isComplete||i<activeRow||(visualPhase&&i===activeRow);
         if(complete){t=target.theta;d=target.d;a=target.a;alpha=target.alpha;started=true;}
-        else if(!isComplete&&i===activeRow){started=true;t=phaseIndex>0?target.theta:target.theta*phaseProgress;d=phaseIndex>1?target.d:phaseIndex===1?target.d*phaseProgress:0;a=phaseIndex>2?target.a:phaseIndex===2?target.a*phaseProgress:0;alpha=phaseIndex===3?target.alpha*phaseProgress:0;}
+        else if(!isComplete&&i===activeRow){
+          started=true;
+          if(phaseIndex===0){
+            if(calculationMode==='symbolic')t=row.theta.variable?THREE.MathUtils.degToRad(45)*Math.sin(2*Math.PI*phaseProgress):0;
+            else {
+              t=target.theta*phaseProgress;
+            }
+          }else t=target.theta;
+          d=phaseIndex>1?target.d:phaseIndex===1?target.d*phaseProgress:0;
+          a=phaseIndex>2?target.a:phaseIndex===2?target.a*phaseProgress:0;
+          if(phaseIndex===3){
+            if(calculationMode==='symbolic')alpha=row.alpha.variable?THREE.MathUtils.degToRad(45)*Math.sin(2*Math.PI*phaseProgress):0;
+            else alpha=target.alpha*phaseProgress;
+          }else alpha=0;
+        }
         const prev=cumulative.clone(),rotated=prev.clone().multiply(new THREE.Matrix4().makeRotationZ(t)),afterD=rotated.clone().multiply(new THREE.Matrix4().makeTranslation(0,0,d)),afterA=afterD.clone().multiply(new THREE.Matrix4().makeTranslation(a,0,0)),next=afterA.clone().multiply(new THREE.Matrix4().makeRotationX(alpha));
         const A=new THREE.Vector3().setFromMatrixPosition(prev),B=new THREE.Vector3().setFromMatrixPosition(afterD),C=new THREE.Vector3().setFromMatrixPosition(afterA);const position=new THREE.Vector3(),q=new THREE.Quaternion();next.decompose(position,q,new THREE.Vector3());
         const frame=frameGroups[i+1];frame.visible=started;frame.position.copy(position);frame.quaternion.copy(q);
         const obj=segmentObjects[i];obj.dRod.visible=started&&d>.012;obj.aRod.visible=started&&a>.012;obj.dRod.userData.update(A,B);obj.aRod.userData.update(B,C);obj.joint.visible=started;obj.joint.position.copy(B);
-        const prevPosition=new THREE.Vector3(),prevQuaternion=new THREE.Quaternion();prev.decompose(prevPosition,prevQuaternion,new THREE.Vector3());obj.qDimension.group.visible=started&&!!row.theta.implicitQ;obj.qDimension.group.position.copy(B);obj.qDimension.group.quaternion.copy(prevQuaternion);
-        const active=!isComplete&&i===activeRow;obj.dRod.material.emissive.setHex(active?0x501317:0x000000);obj.aRod.material.emissive.setHex(active?0x501317:0x000000);
+        obj.visualArcZ.group.visible=visualPhase&&i===activeRow&&(visualMotionMode==='perpendicular'||visualMotionMode==='both');
+        obj.visualArcX.group.visible=visualPhase&&i===activeRow&&(visualMotionMode==='parallel'||visualMotionMode==='both');
+        obj.visualArcZ.group.position.copy(position);obj.visualArcZ.group.quaternion.copy(q);
+        obj.visualArcX.group.position.copy(position);obj.visualArcX.group.quaternion.copy(q).multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),Math.PI/2));
+        if(visualPhase&&i===activeRow){
+          const swing=THREE.MathUtils.degToRad(45)*Math.sin(2*Math.PI*visualProgress),visualQ=q.clone();
+          if(visualMotionMode==='perpendicular'||visualMotionMode==='both')visualQ.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,1),swing));
+          if(visualMotionMode==='parallel'||visualMotionMode==='both')visualQ.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),swing));
+          frame.quaternion.copy(visualQ);
+        }
+        const active=!isComplete&&i===activeRow&&!visualPhase;obj.dRod.material.emissive.setHex(active?0x501317:0x000000);obj.aRod.material.emissive.setHex(active?0x501317:0x000000);
         const xAxis=new THREE.Vector3(1,0,0).transformDirection(rotated),yAxis=new THREE.Vector3(0,1,0).transformDirection(rotated);
         updateDimension(obj.dDimension,A,B,xAxis.clone().multiplyScalar(.19),`d${i+1} = ${format(d)}`);
         updateDimension(obj.aDimension,B,C,yAxis.clone().multiplyScalar(.19),`a${i+1} = ${format(a)}`);
         cumulative=next;latestPositions.push(position.clone());instant.push({theta:t,d,a,alpha});
       });
-      updateStageUI(activeRow,phaseIndex,phaseProgress,instant,isComplete);
+      updateStageUI(activeRow,phaseIndex,phaseProgress,instant,isComplete,visualPhase,visualProgress);
       const now=performance.now();if(now-lastUiUpdate>100){updateReadouts(instant,activeRow);updateMatrixReadout(cumulative);lastUiUpdate=now;}
     }
-    function updateReadouts(instant,activeRow=-1){$('readoutGrid').innerHTML=instant.map((v,i)=>`<div class="readout-item ${i===activeRow?'current':''}"><div class="r-title">O${i} → O${i+1}</div><div class="r-values">θ ${fmtAngle(v.theta)}<br>d ${format(v.d)}<br>a ${format(v.a)}<br>α ${fmtAngle(v.alpha)}</div></div>`).join('');$('dhSequence').querySelectorAll('.dh-row').forEach((row,i)=>{const v=instant[i];if(!v)return;const values=[fmtAngle(v.theta),format(v.d),format(v.a),fmtAngle(v.alpha)];row.querySelectorAll('[data-cell]').forEach((cell,j)=>{cell.innerHTML=`${['θ','d','a','α'][j]}${i+1}<br><small>${values[j]}</small>`})})}
+    function updateReadouts(instant,activeRow=-1){
+      $('readoutGrid').innerHTML=instant.map((v,i)=>{
+        const values=calculationMode==='symbolic'?`${symbolicAngleExpression('theta',i)} · ref ${fmtAngle(v.theta)}<br>d${i+1} = 1<br>a${i+1} = 1<br>${symbolicAngleExpression('alpha',i)} · ref ${fmtAngle(v.alpha)}`:`θ ${fmtAngle(v.theta)}<br>d ${format(v.d)}<br>a ${format(v.a)}<br>α ${fmtAngle(v.alpha)}`;
+        return `<div class="readout-item ${i===activeRow?'current':''}"><div class="r-title">O${i} → O${i+1}</div><div class="r-values">${values}</div></div>`;
+      }).join('');
+      $('dhSequence').querySelectorAll('.dh-row').forEach((row,i)=>{const v=instant[i];if(!v)return;
+        const values=calculationMode==='symbolic'?[symbolicAngleExpression('theta',i),`d${i+1}`,`a${i+1}`,symbolicAngleExpression('alpha',i)]:[fmtAngle(v.theta),format(v.d),format(v.a),fmtAngle(v.alpha)];
+        const refs=calculationMode==='symbolic'?[fmtAngle(v.theta)+' ref','1 ref','1 ref',fmtAngle(v.alpha)+' ref']:[fmtAngle(v.theta),format(v.d),format(v.a),fmtAngle(v.alpha)];
+        row.querySelectorAll('[data-cell]').forEach((cell,j)=>{cell.innerHTML=`${['θ','d','a','α'][j]}${i+1}<br><small>${values[j]} · ${refs[j]}</small>`});
+      });
+    }
     function updateMatrixReadout(m){const e=m.elements;const matrix=[[e[0],e[4],e[8],e[12]],[e[1],e[5],e[9],e[13]],[e[2],e[6],e[10],e[14]],[e[3],e[7],e[11],e[15]]];$('matrixResult').innerHTML=`<table class="matrix"><tbody>${matrix.map((r,i)=>`<tr><td>${i+1}</td>${r.map(v=>`<td>${format(v,4)}</td>`).join('')}</tr>`).join('')}</tbody></table>`}
     function matrixRows(m){const e=m.elements;return [[e[0],e[4],e[8],e[12]],[e[1],e[5],e[9],e[13]],[e[2],e[6],e[10],e[14]],[e[3],e[7],e[11],e[15]]];}
     function matrixTableHTML(m,label){const data=matrixRows(m);return `<div class="matrix-block"><div class="matrix-block-label">${label}</div><div class="matrix-scroll"><table class="matrix math-matrix"><tbody>${data.map((r,i)=>`<tr><td>${i+1}</td>${r.map(v=>`<td>${format(v,4)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`}
+    function symbolicMatrixHTML(data,label){
+      return `<div class="matrix-block matrix-symbolic"><div class="matrix-block-label">${label}</div><div class="matrix-scroll"><table class="matrix math-matrix"><tbody>${data.map((row,i)=>`<tr><td>${i+1}</td>${row.map(value=>`<td>${value}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
+    }
     function renderMatrixDerivation(){
+      if(calculationMode==='symbolic'){
+        const rowHTML=rows.map((row,i)=>{
+          const n=i+1,theta=symbolicAngleExpression('theta',i),alpha=symbolicAngleExpression('alpha',i),d=`d_${n}`,a=`a_${n}`;
+          const factors=[
+            {label:`Rz(${theta})`,data:[[`cos(${theta})`,`-sin(${theta})`,'0','0'],[`sin(${theta})`,`cos(${theta})`,'0','0'],['0','0','1','0'],['0','0','0','1']]},
+            {label:`Tz(${d})`,data:[['1','0','0','0'],['0','1','0','0'],['0','0','1',d],['0','0','0','1']]},
+            {label:`Tx(${a})`,data:[['1','0','0',a],['0','1','0','0'],['0','0','1','0'],['0','0','0','1']]},
+            {label:`Rx(${alpha})`,data:[['1','0','0','0'],['0',`cos(${alpha})`,`-sin(${alpha})`,'0'],['0',`sin(${alpha})`,`cos(${alpha})`,'0'],['0','0','0','1']]}
+          ];
+          const A=[
+            [`cos(${theta})`,`-sin(${theta})cos(${alpha})`,`sin(${theta})sin(${alpha})`,`${a}cos(${theta})`],
+            [`sin(${theta})`,`cos(${theta})cos(${alpha})`,`-cos(${theta})sin(${alpha})`,`${a}sin(${theta})`],
+            ['0',`sin(${alpha})`,`cos(${alpha})`,d],
+            ['0','0','0','1']
+          ];
+          return `<details class="matrix-row-detail"><summary><span><strong>Fila ${n} · A${n}</strong><small>θ: ${theta} · d: ${d} · a: ${a} · α: ${alpha}</small></span><b>DESARROLLAR ＋</b></summary><div class="matrix-factors"><div class="matrix-product-line">A${n} = Rz(${theta}) · Tz(${d}) · Tx(${a}) · Rx(${alpha})</div><div class="matrix-factor-grid">${factors.map(f=>symbolicMatrixHTML(f.data,f.label)).join('')}</div>${symbolicMatrixHTML(A,`Matriz D–H resultante A${n}`)}</div></details>`;
+        }).join('');
+        $('matrixDerivation').innerHTML=`<div class="symbolic-note">Modo sin declarar: los parámetros se conservan simbólicamente. La pose final de referencia usa ángulos en 0° y distancias unitarias (1); durante las fases articulares variables se muestra un barrido ilustrativo, sin sustituir los símbolos de las matrices.</div><div class="matrix-convention">Matriz D–H estándar: <strong>Aᵢ = Rz(θᵢ) · Tz(dᵢ) · Tx(aᵢ) · Rx(αᵢ)</strong></div>${rowHTML}<section class="matrix-total"><div class="matrix-product-line">T₀ₙ = A₁ · A₂ · … · Aₙ</div><p>El producto se conserva en forma simbólica para no sustituir ni expandir parámetros que no fueron declarados.</p><div class="matrix-convention">Cada Aᵢ corresponde a la matriz D–H resultante mostrada en su fila. La transformación total mantiene el orden de multiplicación de izquierda a derecha.</div></section>`;
+        return;
+      }
       const rowMatrices=[];const rowHTML=rows.map((row,i)=>{
         const v=targetValues(row),factors=[
           {label:`Rz(θ${i+1})`,m:new THREE.Matrix4().makeRotationZ(v.theta)},
@@ -501,30 +717,68 @@
           {label:`Rx(α${i+1})`,m:new THREE.Matrix4().makeRotationX(v.alpha)}
         ];
         const A=factors.reduce((acc,f)=>acc.multiply(f.m.clone()),new THREE.Matrix4().identity());rowMatrices.push(A);
-        const thetaNote=row.theta.implicitQ?'q implícita · referencia +45°':row.theta.mode==='q'?`q₀=${format(row.theta.q0,2)}°; amplitud=${format(row.theta.amplitude,2)}°`:`θ=${format(row.theta.fixed,2)}°`;
-        return `<details class="matrix-row-detail"><summary><span><strong>Fila ${i+1} · A${i+1}</strong><small>${thetaNote} · d=${format(v.d)} · a=${format(v.a)} · α=${fmtAngle(v.alpha)}</small></span><b>DESARROLLAR ＋</b></summary><div class="matrix-factors"><div class="matrix-product-line">A${i+1} = Rz(θ${i+1}) · Tz(d${i+1}) · Tx(a${i+1}) · Rx(α${i+1})</div><div class="matrix-factor-grid">${factors.map(f=>matrixTableHTML(f.m,f.label)).join('')}</div>${matrixTableHTML(A,`Resultado A${i+1}`)}</div></details>`;
+        const thetaNote=`θ${i+1}=${format(THREE.MathUtils.radToDeg(v.theta),2)}°`;
+        const alphaNote=`α${i+1}=${format(THREE.MathUtils.radToDeg(v.alpha),2)}°`;
+        return `<details class="matrix-row-detail"><summary><span><strong>Fila ${i+1} · A${i+1}</strong><small>${thetaNote} · d=${format(v.d)} · a=${format(v.a)} · ${alphaNote}</small></span><b>DESARROLLAR ＋</b></summary><div class="matrix-factors"><div class="matrix-product-line">A${i+1} = Rz(θ${i+1}) · Tz(d${i+1}) · Tx(a${i+1}) · Rx(α${i+1})</div><div class="matrix-factor-grid">${factors.map(f=>matrixTableHTML(f.m,f.label)).join('')}</div>${matrixTableHTML(A,`Resultado A${i+1}`)}</div></details>`;
       }).join('');
       const total=rowMatrices.reduce((acc,m)=>acc.multiply(m.clone()),new THREE.Matrix4().identity());
       $('matrixDerivation').innerHTML=`<div class="matrix-convention">Convención estándar: <strong>Aᵢ = Rz(θᵢ) · Tz(dᵢ) · Tx(aᵢ) · Rx(αᵢ)</strong></div>${rowHTML}<section class="matrix-total"><div class="matrix-product-line">T₀ₙ = ${rowMatrices.map((_,i)=>`A${i+1}`).join(' · ')}</div><p>Multiplicación acumulada de las matrices de todas las filas, en orden.</p>${matrixTableHTML(total,'Transformación total T₀ₙ')}</section>`;
     }
-    function animate(token){if(!sceneReady||token!==animationToken)return;requestAnimationFrame(()=>animate(token));const delta=Math.min(clock.getDelta(),.05);if(running){simTime+=delta*speed;evaluatePose(simTime)}orbit.update();renderer.render(scene,camera)}
+    function animate(token){
+      const frame=(timestamp)=>{
+        if(!sceneReady||token!==animationToken||animationFaulted)return;
+        requestAnimationFrame(frame);
+        const delta=lastFrameTimestamp?Math.min((timestamp-lastFrameTimestamp)/1000,.05):1/60;
+        lastFrameTimestamp=timestamp;
+        try{
+          if(running){simTime+=delta*speed;evaluatePose(simTime);}
+          if(orbit)orbit.update();
+          if(renderer&&scene&&camera)renderer.render(scene,camera);
+        }catch(error){
+          animationFaulted=true;running=false;
+          console.error('DH Motion Lab: error durante la animación 3D',error);
+          $('playPause').textContent='▶ Reanudar';
+          $('stageTitle').textContent='Animación detenida por un error';
+          $('stageHint').textContent=error?.message||'No fue posible actualizar la escena 3D.';
+          setToast('Se produjo un error al actualizar la escena 3D. Revisa la consola del navegador.');
+        }
+      };
+      requestAnimationFrame(frame);
+    }
     function showScene(){
       $('setupPanel').classList.add('hidden');$('sceneSection').classList.remove('hidden');$('sceneSection').scrollIntoView({behavior:'smooth',block:'start'});
-      $('chainSummary').innerHTML=rows.map((r,i)=>`<div class="chain-item"><span>O${i} → O${i+1}</span><strong>${r.theta.mode==='q'?(r.theta.implicitQ?'q implícita':'q(t)'):'θ constante'} · ${r.d.mode==='d'||r.a.mode==='d'?'distancia variable':'distancia constante'}</strong></div>`).join('');
-      $('readoutGrid').innerHTML='';$('pointResult').innerHTML='<div class="result-placeholder">Se transformará respecto a la pose final Oₙ.</div>';pointHasBeenCalculated=false;pointMarker&&(pointMarker.visible=false);pointLine&&(pointLine.visible=false);finalTransform=calculateFinalTransform();renderMatrixDerivation();sceneReady=true;animationToken++;running=true;simTime=0;createSceneSequence();initScene();evaluatePose(0);$('playPause').textContent='Ⅱ Pausar';
+      $('chainSummary').innerHTML=rows.map((r,i)=>`<div class="chain-item"><span>O${i} → O${i+1}</span><strong>θ: ${[r.theta.variable?'variable':'',r.theta.constant?'constante':''].filter(Boolean).join(' + ')||'0'} · α: ${[r.alpha.variable?'variable':'',r.alpha.constant?'constante':''].filter(Boolean).join(' + ')||'0'} · ${calculationMode==='symbolic'?'referencia unitaria':'valores declarados'}</strong></div>`).join('');
+      $('readoutGrid').innerHTML='';$('pointResult').innerHTML=calculationMode==='symbolic'?'<div class="result-placeholder">Resultado numérico calculado con la pose de referencia: ángulos 0° y distancias unitarias.</div>':'<div class="result-placeholder">Se transformará respecto a la pose final Oₙ.</div>';$('matrixResult').dataset.mode=calculationMode;document.querySelector('.matrix-card .card-heading span').textContent=calculationMode==='symbolic'?'POSE DE ANIMACIÓN · REF. VISUAL':'POSE NUMÉRICA ACTUAL';
+      pointHasBeenCalculated=false;pointMarker&&(pointMarker.visible=false);pointLine&&(pointLine.visible=false);finalTransform=calculateFinalTransform();renderMatrixDerivation();
+      $('chainCard').classList.add('mobile-active');$('pointCard').classList.remove('mobile-active');document.querySelectorAll('[data-side-tab]').forEach(b=>{const active=b.dataset.sideTab==='chain';b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active))});
+      sceneReady=true;animationToken++;running=true;simTime=0;lastFrameTimestamp=0;animationFaulted=false;createSceneSequence();initScene();evaluatePose(0);animate(animationToken);$('playPause').textContent='Ⅱ Pausar';
     }
     $('generateScene').addEventListener('click',showScene);
+    function disposeSceneObjects(){
+      sceneReady=false;animationToken++;if(resizeObserver){resizeObserver.disconnect();resizeObserver=null}window.removeEventListener('resize',resizeRenderer);if(orbit){orbit.dispose();orbit=null}
+      if(scene){scene.traverse(obj=>{if(obj.geometry)obj.geometry.dispose();if(obj.material){const mats=Array.isArray(obj.material)?obj.material:[obj.material];mats.forEach(mat=>{if(mat.map)mat.map.dispose();mat.dispose()})}});scene.clear()}
+      scene=null;camera=null;orbit=null;rootGroup=null;frameGroups=[];segmentObjects=[];pointMarker=null;pointLine=null;
+    }
     $('editConfig').addEventListener('click',()=>{
-      sceneReady=false;animationToken++;if(resizeObserver){resizeObserver.disconnect();resizeObserver=null}window.removeEventListener('resize',resizeRenderer);if(scene){scene.traverse(obj=>{if(obj.geometry)obj.geometry.dispose();if(obj.material){const mats=Array.isArray(obj.material)?obj.material:[obj.material];mats.forEach(mat=>{if(mat.map)mat.map.dispose();mat.dispose()})}})}scene=null;camera=null;orbit=null;
-      $('sceneSection').classList.add('hidden');$('setupPanel').classList.remove('hidden');$('reviewScreen').classList.remove('hidden');$('wizard').classList.add('hidden');$('countScreen').classList.add('hidden');$('setupKicker').textContent='REVISIÓN';$('stepCount').textContent=`${rows.length} MOVIMIENTOS`;showReview();$('setupPanel').scrollIntoView({behavior:'smooth'});
+      disposeSceneObjects();$('sceneSection').classList.add('hidden');$('setupPanel').classList.remove('hidden');$('reviewScreen').classList.remove('hidden');$('wizard').classList.add('hidden');$('countScreen').classList.add('hidden');$('setupKicker').textContent='REVISIÓN';$('stepCount').textContent=`${rows.length} MOVIMIENTOS`;singleEditMode=false;showReview();$('setupPanel').scrollIntoView({behavior:'smooth'});
     });
-    $('playPause').addEventListener('click',()=>{running=!running;$('playPause').textContent=running?'Ⅱ Pausar':'▶ Reanudar';if(!running)evaluatePose(simTime)});
+    document.querySelectorAll('[data-side-tab]').forEach(btn=>btn.addEventListener('click',()=>{
+      const tab=btn.dataset.sideTab;$('chainCard').classList.toggle('mobile-active',tab==='chain');$('pointCard').classList.toggle('mobile-active',tab==='point');
+      document.querySelectorAll('[data-side-tab]').forEach(b=>{const active=b===btn;b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active))});
+    }));
+    $('resetSimulation').addEventListener('click',()=>{
+      disposeSceneObjects();rows=Array.from({length:2},defaults);calculationMode='declared';visualMotionMode='none';steps=[];stepIndex=0;currentStep=null;reviewReturnIndex=0;singleEditMode=false;focusedReview={row:-1,key:''};
+      updateCount();$('pointX').value='0.5';$('pointY').value='0.5';$('pointZ').value='0.5';$('speed').value='1';speed=1;$('speedValue').textContent='1.0×';
+      document.querySelectorAll('[data-calc-mode]').forEach(b=>{const active=b.dataset.calcMode==='declared';b.classList.toggle('selected',active);b.setAttribute('aria-pressed',String(active));b.querySelector('i').textContent=active?'●':'○'});
+      $('visualMotionMode').value='none';$('followPoint').checked=true;$('sceneSection').classList.add('hidden');$('setupPanel').classList.remove('hidden');$('wizard').classList.add('hidden');$('reviewScreen').classList.add('hidden');$('countScreen').classList.remove('hidden');$('setupKicker').textContent='CONFIGURACIÓN';$('stepCount').textContent='INICIO';$('setupPanel').scrollIntoView({behavior:'smooth'});setToast('Simulación reiniciada. Configura una nueva cadena.');
+    });
+    $('playPause').addEventListener('click',()=>{if(animationFaulted){setToast('Reinicia la simulación para recuperar la escena.');return;}running=!running;$('playPause').textContent=running?'Ⅱ Pausar':'▶ Reanudar';if(!running)evaluatePose(simTime)});
     $('speed').addEventListener('input',e=>{speed=Number(e.target.value);$('speedValue').textContent=`${speed.toFixed(1)}×`});
     $('resetView').addEventListener('click',()=>{if(!camera)return;camera.position.set(6.2,-8.2,6.2);orbit.target.set(Math.max(.8,rows.length*.32),0,.45);orbit.update()});
     function updatePointFromInputs(showMessage=true){
       const x=Number($('pointX').value),y=Number($('pointY').value),z=Number($('pointZ').value);if(![x,y,z].every(Number.isFinite)){if(showMessage)setToast('Introduce x, y, z válidos.');return}
       const local=new THREE.Vector3(x,y,z),world=local.clone().applyMatrix4(finalTransform);pointMarker.position.copy(world);pointMarker.visible=$('followPoint').checked;updateLine(pointLine,new THREE.Vector3(),world);pointLine.visible=$('followPoint').checked;pointHasBeenCalculated=true;
-      $('pointResult').innerHTML=`<div class="result-title">COORDENADAS FINALES EN O₀</div><div class="result-vector">x₀ = ${format(world.x,4)}<br>y₀ = ${format(world.y,4)}<br>z₀ = ${format(world.z,4)}</div>`;if(showMessage)setToast('Punto transformado a la pose final.');
+      $('pointResult').innerHTML=`<div class="result-title">COORDENADAS EN O₀</div><div class="result-vector">x₀ = ${format(world.x,4)}<br>y₀ = ${format(world.y,4)}<br>z₀ = ${format(world.z,4)}</div>${calculationMode==='symbolic'?'<small class="field-help">Calculado con la pose numérica de referencia (ángulos 0°, distancias 1).</small>':''}`;if(showMessage)setToast('Punto transformado a la pose de referencia.');
     }
     $('transformPoint').addEventListener('click',()=>updatePointFromInputs(true));
     ['pointX','pointY','pointZ'].forEach(id=>$(id).addEventListener('change',()=>{if(pointHasBeenCalculated)updatePointFromInputs(false)}));
