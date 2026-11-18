@@ -184,6 +184,14 @@
     .symbolic-note{margin:0 0 16px;padding:11px 13px;border:1px solid #574047;border-radius:7px;background:#211619;color:#e6c9cc;font:10px/1.55 var(--mono)}
     .matrix-symbolic .math-matrix td{color:#f0c9cc}
     .matrix-symbolic .matrix-block-label{color:#ffb4b7}
+    .symbolic-product-result{margin-top:12px;border:1px solid #68363c;border-radius:8px;background:#141113;padding:12px}
+    .symbolic-product-result .matrix-block-label{color:#ffb4b7;font:600 11px var(--mono);margin-bottom:10px}
+    .symbolic-product-result .matrix-scroll{max-height:560px;overflow:auto}
+    .symbolic-product-table{min-width:760px;table-layout:fixed}
+    .symbolic-product-table td{white-space:normal;overflow-wrap:anywhere;word-break:break-word;vertical-align:top;text-align:left;line-height:1.55;font-size:9px;min-width:150px;max-width:280px}
+    .symbolic-definitions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin:10px 0}
+    .symbolic-definitions span{display:block;border:1px solid #333840;border-radius:6px;padding:7px 9px;background:#101316;color:#cdd0d5;font:10px/1.5 var(--mono);overflow-wrap:anywhere}
+    @media(max-width:560px){.symbolic-definitions{grid-template-columns:1fr}.symbolic-product-table{min-width:680px}}
     .row-parameter-focus{animation:reviewFocus .38s ease both}
     @keyframes reviewFocus{from{background:#33171a}to{background:transparent}}
     @media(max-width:850px){
@@ -545,11 +553,13 @@
       dim.arrowA.scale.set(1,Math.max(.55,h/.12),1);dim.arrowB.scale.set(1,Math.max(.55,h/.12),1);
       dim.label.position.copy(start).add(end).multiplyScalar(.5).add(offsetVector.clone().multiplyScalar(.85));dim.label.userData.setText(labelText);
     }
-    function makeAngularDimension(){
+    function makeAngularDimension(labelText='q'){
       const group=new THREE.Group(),arc=makeLine(0xf06b70),startGuide=makeLine(0xf06b70),endGuide=makeLine(0xf06b70),zeroGuide=makeLine(0x777d86,true);
       const arrowMat=new THREE.MeshStandardMaterial({color:0xf06b70,emissive:0x6a171c,emissiveIntensity:.55,depthTest:false});
       const arrowStart=new THREE.Mesh(new THREE.ConeGeometry(.035,.12,10),arrowMat),arrowEnd=new THREE.Mesh(new THREE.ConeGeometry(.035,.12,10),arrowMat);
-      const label=makeTextSprite('q',{color:'#ff969a',border:'rgba(240,68,73,.8)',scaleX:.25,scaleY:.075,fontSize:38});
+      const label=makeTextSprite(labelText,{color:'#ff969a',border:'rgba(240,68,73,.8)',scaleX:.25,scaleY:.075,fontSize:38});
+      const minusLabel=makeTextSprite('−45°',{color:'#ff9da1',border:'rgba(240,68,73,.55)',scaleX:.29,scaleY:.075,fontSize:27});
+      const plusLabel=makeTextSprite('+45°',{color:'#ff9da1',border:'rgba(240,68,73,.55)',scaleX:.29,scaleY:.075,fontSize:27});
       const radius=.43,outer=radius+.09,angles=[];
       for(let i=0;i<=48;i++)angles.push(-Math.PI/4+(Math.PI/2)*i/48);
       const pts=angles.map(a=>new THREE.Vector3(radius*Math.cos(a),radius*Math.sin(a),.012));
@@ -560,11 +570,20 @@
       const tangentA=new THREE.Vector3(Math.SQRT1_2,Math.SQRT1_2,0),tangentB=new THREE.Vector3(-Math.SQRT1_2,Math.SQRT1_2,0);
       arrowStart.position.copy(pA);arrowStart.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),tangentA);
       arrowEnd.position.copy(pB);arrowEnd.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),tangentB);
-      label.position.set(0,radius+.19,.02);group.add(arc,startGuide,endGuide,zeroGuide,arrowStart,arrowEnd,label);group.visible=false;
+      label.position.set(0,radius+.18,.02);
+      minusLabel.position.copy(pA.clone().normalize().multiplyScalar(outer+.22));minusLabel.position.z=.025;
+      plusLabel.position.copy(pB.clone().normalize().multiplyScalar(outer+.22));plusLabel.position.z=.025;
+      group.add(arc,startGuide,endGuide,zeroGuide,arrowStart,arrowEnd,label,minusLabel,plusLabel);group.visible=false;
       return{group};
     }
     function rzTz(theta,d){const c=Math.cos(theta),s=Math.sin(theta);return new THREE.Matrix4().set(c,-s,0,0,s,c,0,0,0,0,1,d,0,0,0,1)}
     function smooth01(x){x=Math.max(0,Math.min(1,x));return x*x*(3-2*x)}
+    function hasZeroVariableAngle(row,key){
+      const parameter=row[key];
+      if(!parameter?.variable)return false;
+      if(calculationMode==='symbolic')return true;
+      return Math.abs(Number(parameter.variableValue)||0)<1e-8;
+    }
     function targetValues(row){
       if(calculationMode==='symbolic')return{theta:0,d:1,a:1,alpha:0};
       const theta=THREE.MathUtils.degToRad(declaredAngleValue(row.theta));
@@ -608,7 +627,7 @@
       for(let i=0;i<rows.length;i++){
         const frame=new THREE.Group();addAxes(frame,axisLength*1.04);const dot=new THREE.Mesh(new THREE.SphereGeometry(.055,16,12),new THREE.MeshStandardMaterial({color:0xffffff,emissive:0x777777,emissiveIntensity:.7}));frame.add(dot);const name=makeTextSprite(`O${i+1}`,{scaleX:.25,scaleY:.085,fontSize:40});name.position.set(0,0,-.19);frame.add(name);frame.visible=false;rootGroup.add(frame);frameGroups.push(frame);
         const dRod=makeRod(0x9da2aa),aRod=makeRod(0xd0d2d6);rootGroup.add(dRod,aRod);
-        const dDimension=makeDimension(0xf06b70),aDimension=makeDimension(0xc5cbd3),visualArcZ=makeAngularDimension(),visualArcX=makeAngularDimension();visualArcX.group.rotation.y=Math.PI/2;rootGroup.add(dDimension.group,aDimension.group,visualArcZ.group,visualArcX.group);
+        const dDimension=makeDimension(0xf06b70),aDimension=makeDimension(0xc5cbd3),visualArcZ=makeAngularDimension('q'),visualArcX=makeAngularDimension('α');visualArcX.group.rotation.y=Math.PI/2;rootGroup.add(dDimension.group,aDimension.group,visualArcZ.group,visualArcX.group);
         const joint=new THREE.Mesh(new THREE.SphereGeometry(.075,18,14),new THREE.MeshStandardMaterial({color:0xf04449,metalness:.35,roughness:.34,emissive:0x66191d,emissiveIntensity:.65}));rootGroup.add(joint);
         segmentObjects.push({dRod,aRod,dDimension,aDimension,visualArcZ,visualArcX,joint});
       }
@@ -652,14 +671,30 @@
         const A=new THREE.Vector3().setFromMatrixPosition(prev),B=new THREE.Vector3().setFromMatrixPosition(afterD),C=new THREE.Vector3().setFromMatrixPosition(afterA);const position=new THREE.Vector3(),q=new THREE.Quaternion();next.decompose(position,q,new THREE.Vector3());
         const frame=frameGroups[i+1];frame.visible=started;frame.position.copy(position);frame.quaternion.copy(q);
         const obj=segmentObjects[i];obj.dRod.visible=started&&d>.012;obj.aRod.visible=started&&a>.012;obj.dRod.userData.update(A,B);obj.aRod.userData.update(B,C);obj.joint.visible=started;obj.joint.position.copy(B);
-        obj.visualArcZ.group.visible=visualPhase&&i===activeRow&&(visualMotionMode==='perpendicular'||visualMotionMode==='both');
-        obj.visualArcX.group.visible=visualPhase&&i===activeRow&&(visualMotionMode==='parallel'||visualMotionMode==='both');
-        obj.visualArcZ.group.position.copy(position);obj.visualArcZ.group.quaternion.copy(q);
-        obj.visualArcX.group.position.copy(position);obj.visualArcX.group.quaternion.copy(q).multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),Math.PI/2));
+        const prevOrigin=new THREE.Vector3(),prevQuaternion=new THREE.Quaternion(),prevScale=new THREE.Vector3();
+        prev.decompose(prevOrigin,prevQuaternion,prevScale);
+        const afterAQuaternion=new THREE.Quaternion(),afterAPosition=new THREE.Vector3(),afterAScale=new THREE.Vector3();
+        afterA.decompose(afterAPosition,afterAQuaternion,afterAScale);
+        const autoThetaArc=started&&hasZeroVariableAngle(row,'theta');
+        const autoAlphaArc=started&&hasZeroVariableAngle(row,'alpha');
+        const globalThetaArc=visualPhase&&i===activeRow&&(visualMotionMode==='perpendicular'||visualMotionMode==='both');
+        const globalAlphaArc=visualPhase&&i===activeRow&&(visualMotionMode==='parallel'||visualMotionMode==='both');
+        obj.visualArcZ.group.visible=autoThetaArc||globalThetaArc;
+        obj.visualArcX.group.visible=autoAlphaArc||globalAlphaArc;
+        const thetaCenter=t;
+        obj.visualArcZ.group.position.copy(prevOrigin);
+        obj.visualArcZ.group.quaternion.copy(prevQuaternion).multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,1),thetaCenter));
+        const alphaCenter=alpha;
+        obj.visualArcX.group.position.copy(C);
+        obj.visualArcX.group.quaternion.copy(afterAQuaternion)
+          .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),alphaCenter))
+          .multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0),Math.PI/2));
         if(visualPhase&&i===activeRow){
           const swing=THREE.MathUtils.degToRad(45)*Math.sin(2*Math.PI*visualProgress),visualQ=q.clone();
           if(visualMotionMode==='perpendicular'||visualMotionMode==='both')visualQ.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,0,1),swing));
           if(visualMotionMode==='parallel'||visualMotionMode==='both')visualQ.multiply(new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1,0,0),swing));
+          // Desplazamiento exclusivamente visual del marco de la fila activa.
+          // 'cumulative' conserva 'next' (DH nominal), por lo que el giro no contamina la fila siguiente.
           frame.quaternion.copy(visualQ);
         }
         const active=!isComplete&&i===activeRow&&!visualPhase;obj.dRod.material.emissive.setHex(active?0x501317:0x000000);obj.aRod.material.emissive.setHex(active?0x501317:0x000000);
@@ -685,11 +720,59 @@
     function updateMatrixReadout(m){const e=m.elements;const matrix=[[e[0],e[4],e[8],e[12]],[e[1],e[5],e[9],e[13]],[e[2],e[6],e[10],e[14]],[e[3],e[7],e[11],e[15]]];$('matrixResult').innerHTML=`<table class="matrix"><tbody>${matrix.map((r,i)=>`<tr><td>${i+1}</td>${r.map(v=>`<td>${format(v,4)}</td>`).join('')}</tr>`).join('')}</tbody></table>`}
     function matrixRows(m){const e=m.elements;return [[e[0],e[4],e[8],e[12]],[e[1],e[5],e[9],e[13]],[e[2],e[6],e[10],e[14]],[e[3],e[7],e[11],e[15]]];}
     function matrixTableHTML(m,label){const data=matrixRows(m);return `<div class="matrix-block"><div class="matrix-block-label">${label}</div><div class="matrix-scroll"><table class="matrix math-matrix"><tbody>${data.map((r,i)=>`<tr><td>${i+1}</td>${r.map(v=>`<td>${format(v,4)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`}
-    function symbolicMatrixHTML(data,label){
-      return `<div class="matrix-block matrix-symbolic"><div class="matrix-block-label">${label}</div><div class="matrix-scroll"><table class="matrix math-matrix"><tbody>${data.map((row,i)=>`<tr><td>${i+1}</td>${row.map(value=>`<td>${value}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
+    function symbolicMatrixHTML(data,label,extraClass=''){
+      return `<div class="matrix-block matrix-symbolic ${extraClass}"><div class="matrix-block-label">${label}</div><div class="matrix-scroll"><table class="matrix math-matrix"><tbody>${data.map((row,i)=>`<tr><td>${i+1}</td>${row.map(value=>`<td>${value}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
+    }
+    // Álgebra simbólica ligera: expande el producto matricial y combina monomios iguales.
+    function polyTerm(coefficient=1,factors=[]){return coefficient?{coefficient,factors:[...factors].sort()}:null;}
+    function polyAdd(...polys){
+      const terms=new Map();
+      polys.flat(Infinity).forEach(term=>{if(!term)return;const key=term.factors.join('¦');const current=terms.get(key)||{coefficient:0,factors:term.factors};current.coefficient+=term.coefficient;terms.set(key,current)});
+      return [...terms.values()].filter(term=>term.coefficient!==0);
+    }
+    function polyMultiply(left,right){
+      if(!left.length||!right.length)return[];
+      const terms=[];
+      left.forEach(a=>right.forEach(b=>terms.push(polyTerm(a.coefficient*b.coefficient,[...a.factors,...b.factors]))));
+      return polyAdd(terms);
+    }
+    function multiplySymbolicMatrices(left,right){
+      return Array.from({length:4},(_,r)=>Array.from({length:4},(_,c)=>{
+        const products=[];for(let k=0;k<4;k++)products.push(polyMultiply(left[r][k],right[k][c]));return polyAdd(products);
+      }));
+    }
+    function polyToString(poly){
+      if(!poly.length)return '0';
+      return poly.map((term,index)=>{
+        const negative=term.coefficient<0,abs=Math.abs(term.coefficient),body=term.factors.join(' · ')||'1';
+        const value=(abs===1&&term.factors.length)?body:(abs===1?'1':`${abs} · ${body}`);
+        return index===0?(negative?'−':'')+value:(negative?' − ':' + ')+value;
+      }).join('');
+    }
+    function symbolicProductTableHTML(matrix,label){
+      const html=matrix.map((row,i)=>`<tr><td>${i+1}</td>${row.map(poly=>`<td>${polyToString(poly)}</td>`).join('')}</tr>`).join('');
+      return `<div class="symbolic-product-result"><div class="matrix-block-label">${label}</div><div class="matrix-scroll"><table class="matrix math-matrix symbolic-product-table"><tbody>${html}</tbody></table></div></div>`;
+    }
+    function symbolicDHMatrix(index){
+      const n=index+1,theta=`cθ${n}`,stheta=`sθ${n}`,alpha=`cα${n}`,salpha=`sα${n}`,a=`a_${n}`,d=`d_${n}`;
+      const z=[],one=[polyTerm(1,[])];
+      const p=(...args)=>[polyTerm(args[0]??1,args[1]??[])];
+      return [
+        [p(1,[theta]),p(-1,[stheta,alpha]),p(1,[stheta,salpha]),p(1,[a,theta])],
+        [p(1,[stheta]),p(1,[theta,alpha]),p(-1,[theta,salpha]),p(1,[a,stheta])],
+        [z,p(1,[salpha]),p(1,[alpha]),p(1,[d])],
+        [z,z,z,one]
+      ];
+    }
+    function symbolicDefinitionsHTML(){
+      return rows.map((row,i)=>{
+        const n=i+1,theta=symbolicAngleExpression('theta',i),alpha=symbolicAngleExpression('alpha',i);
+        return `<span>cθ${n} = cos(${theta}) · sθ${n} = sin(${theta})</span><span>cα${n} = cos(${alpha}) · sα${n} = sin(${alpha})</span>`;
+      }).join('');
     }
     function renderMatrixDerivation(){
       if(calculationMode==='symbolic'){
+        const rowSymbolicMatrices=[];
         const rowHTML=rows.map((row,i)=>{
           const n=i+1,theta=symbolicAngleExpression('theta',i),alpha=symbolicAngleExpression('alpha',i),d=`d_${n}`,a=`a_${n}`;
           const factors=[
@@ -704,9 +787,17 @@
             ['0',`sin(${alpha})`,`cos(${alpha})`,d],
             ['0','0','0','1']
           ];
+          rowSymbolicMatrices.push(symbolicDHMatrix(i));
           return `<details class="matrix-row-detail"><summary><span><strong>Fila ${n} · A${n}</strong><small>θ: ${theta} · d: ${d} · a: ${a} · α: ${alpha}</small></span><b>DESARROLLAR ＋</b></summary><div class="matrix-factors"><div class="matrix-product-line">A${n} = Rz(${theta}) · Tz(${d}) · Tx(${a}) · Rx(${alpha})</div><div class="matrix-factor-grid">${factors.map(f=>symbolicMatrixHTML(f.data,f.label)).join('')}</div>${symbolicMatrixHTML(A,`Matriz D–H resultante A${n}`)}</div></details>`;
         }).join('');
-        $('matrixDerivation').innerHTML=`<div class="symbolic-note">Modo sin declarar: los parámetros se conservan simbólicamente. La pose final de referencia usa ángulos en 0° y distancias unitarias (1); durante las fases articulares variables se muestra un barrido ilustrativo, sin sustituir los símbolos de las matrices.</div><div class="matrix-convention">Matriz D–H estándar: <strong>Aᵢ = Rz(θᵢ) · Tz(dᵢ) · Tx(aᵢ) · Rx(αᵢ)</strong></div>${rowHTML}<section class="matrix-total"><div class="matrix-product-line">T₀ₙ = A₁ · A₂ · … · Aₙ</div><p>El producto se conserva en forma simbólica para no sustituir ni expandir parámetros que no fueron declarados.</p><div class="matrix-convention">Cada Aᵢ corresponde a la matriz D–H resultante mostrada en su fila. La transformación total mantiene el orden de multiplicación de izquierda a derecha.</div></section>`;
+        const totalSymbolic=rowSymbolicMatrices.reduce((acc,m)=>multiplySymbolicMatrices(acc,m),[
+          [[polyTerm(1,[])],[],[],[]],
+          [[],[polyTerm(1,[])],[],[]],
+          [[],[],[polyTerm(1,[])],[]],
+          [[],[],[],[polyTerm(1,[])]]
+        ]);
+        const definitions=symbolicDefinitionsHTML();
+        $('matrixDerivation').innerHTML=`<div class="symbolic-note">Modo sin declarar: los parámetros se conservan simbólicamente. Para la animación se usan ángulos de referencia de 0° y distancias unitarias (1); estos valores no sustituyen los símbolos del desarrollo.</div><div class="matrix-convention">Matriz D–H estándar: <strong>Aᵢ = Rz(θᵢ) · Tz(dᵢ) · Tx(aᵢ) · Rx(αᵢ)</strong></div>${rowHTML}<section class="matrix-total"><div class="matrix-product-line">T₀ₙ = A₁ · A₂ · … · Aₙ</div><p>Producto matricial simbólico expandido. Cada entrada se expresa como sumas de productos de senos, cosenos y longitudes simbólicas.</p><div class="symbolic-definitions">${definitions}</div>${symbolicProductTableHTML(totalSymbolic,'Resultado desarrollado T₀ₙ · 4 × 4')}</section>`;
         return;
       }
       const rowMatrices=[];const rowHTML=rows.map((row,i)=>{
@@ -749,7 +840,7 @@
       $('setupPanel').classList.add('hidden');$('sceneSection').classList.remove('hidden');$('sceneSection').scrollIntoView({behavior:'smooth',block:'start'});
       $('chainSummary').innerHTML=rows.map((r,i)=>`<div class="chain-item"><span>O${i} → O${i+1}</span><strong>θ: ${[r.theta.variable?'variable':'',r.theta.constant?'constante':''].filter(Boolean).join(' + ')||'0'} · α: ${[r.alpha.variable?'variable':'',r.alpha.constant?'constante':''].filter(Boolean).join(' + ')||'0'} · ${calculationMode==='symbolic'?'referencia unitaria':'valores declarados'}</strong></div>`).join('');
       $('readoutGrid').innerHTML='';$('pointResult').innerHTML=calculationMode==='symbolic'?'<div class="result-placeholder">Resultado numérico calculado con la pose de referencia: ángulos 0° y distancias unitarias.</div>':'<div class="result-placeholder">Se transformará respecto a la pose final Oₙ.</div>';$('matrixResult').dataset.mode=calculationMode;document.querySelector('.matrix-card .card-heading span').textContent=calculationMode==='symbolic'?'POSE DE ANIMACIÓN · REF. VISUAL':'POSE NUMÉRICA ACTUAL';
-      pointHasBeenCalculated=false;pointMarker&&(pointMarker.visible=false);pointLine&&(pointLine.visible=false);finalTransform=calculateFinalTransform();renderMatrixDerivation();
+      pointHasBeenCalculated=false;pointMarker&&(pointMarker.visible=false);pointLine&&(pointLine.visible=false);finalTransform=calculateFinalTransform();renderMatrixDerivation();$('matrixDerivationDetails').open=calculationMode==='symbolic';
       $('chainCard').classList.add('mobile-active');$('pointCard').classList.remove('mobile-active');document.querySelectorAll('[data-side-tab]').forEach(b=>{const active=b.dataset.sideTab==='chain';b.classList.toggle('active',active);b.setAttribute('aria-selected',String(active))});
       sceneReady=true;animationToken++;running=true;simTime=0;lastFrameTimestamp=0;animationFaulted=false;createSceneSequence();initScene();evaluatePose(0);animate(animationToken);$('playPause').textContent='Ⅱ Pausar';
     }
